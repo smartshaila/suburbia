@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8" />
+		<title>Hex Grids!</title>
+		<link rel="stylesheet" href="css/main.css"/>
+		<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="js/suburbia.js"></script>
+		<script src="https://rawgithub.com/mpalmerlee/HexagonTools/master/js/HexagonTools.js"></script>
+	</head>
+	<body>
+		<div id="header">
+		  Suburbia
+		  <!--Need to fix this to be a nav li with bg images and hover states -->
+		  <img src="images/settings.png" class="menu_icon float_right" width="20px" height="20px"/>
+		  <img src="images/user.png" class="menu_icon float_right" width="20px" height="20px"/>
+		</div>
+		<div id="tile_supply">
+		  <div id="tile_count">
+			<div class="section_heading">Tiles Remaining</div>
+			<div id="a_supply" class="float_left">18</div>
+			<div id="b_supply" class="float_left">15</div>
+			<div id="c_supply" class="float_left">22</div>
+		</div>
+		  <div id="real_estate">
+			<div class="section_heading">Real Estate</div>
+			<ul>
+				<li id="tile1" class="residential airport">
+				  <div class="inflation">+ $10</div>
+				  <div class="tile_title">Mobile Home Community</div>
+				  <div class="tile_cost">$22</div>
+				</li>
+				<li id="tile2" class="commercial car">
+				  <div class="inflation">+ $8</div>
+				  <div class="tile_title">Mobile Home Community</div>
+				  <div class="tile_cost">$22</div>
+				</li>
+				<li id="tile3" class="industrial restaurant">
+				  <div class="inflation">+ $6</div>
+				  <div class="tile_title">Mobile Home Community</div>
+				  <div class="tile_cost">$22</div>
+				</li>
+				<li id="tile4" class="government office">
+				  <div class="inflation">+ $4</div>
+				  <div class="tile_title">Mobile Home Community</div>
+				  <div class="tile_cost">$22</div>
+				</li>
+				<li id="tile5" class="redevelopment school">
+				  <div class="inflation">+ $2</div>
+				 <div class="tile_title">Mobile Home Community</div>
+				  <div class="tile_cost">$22</div>
+				</li>
+				<li id="tile6" class="government skyscraper">
+				  <div class="inflation">+ $0</div>
+				  <div class="tile_title">Mobile Home Community</div>
+				  <div class="tile_cost">$22</div>
+				</li>
+				<li id="tile7" class="government">
+				  <div class="inflation">+ $0</div>
+				  <div class="tile_title">Mobile Home Community</div>
+				  <div class="tile_cost">$22</div>
+				</li>
+			</ul>
+		  </div>
+		  <div id="base_tiles">
+			But if you're broke you can always buy these base tiles.
+		  </div>
+		</div>
+		<div id="borough">
+		  <canvas id="map"/>
+		  <h3>Map</h3>
+		</div>
+		<div id="player_info">
+		  <div id="goals">
+			<span class="section_heading">Goals</span>
+			<ul>
+			  <li id="goal1" class="unclaimed">
+				<div class="float_left">
+				  <span class="goal_title">Air Traffic Controller</span> <br />
+				  <span class="goal_description">Most Contiguous </span>
+				  <img src="images/lake_icon.png" class="icon"/>
+				</div>
+				<div class="float_right border_left">
+				  <div class="goal_amount">+ 20 </div>
+				  <div class="goal_owner">&nbsp;</div>
+				</div>
+			  </li>
+			  <li id="goal2" class="unclaimed">
+				<div class="float_left">
+				  <span class="goal_title">Air Traffic Controller</span> <br />
+				  <span class="goal_description">Most Contiguous </span>
+				  <img src="images/lake_icon.png" class="icon"/>
+				</div>
+				<div class="float_right border_left">
+				  <div class="goal_amount">+ 10 </div>
+				  <div class="goal_owner">&nbsp;</div>
+				</div>
+			  </li>
+			  <li id="goal3" class="player1">
+				<div class="float_left">
+				  <span class="goal_title">Libertarian</span> <br />
+				  <span class="goal_description">Most Contiguous </span>
+				  <img src="images/lake_icon.png" class="icon"/>
+				</div>
+				<div class="float_right border_left">
+				  <div class="goal_amount">+ 20 </div>
+				  <div class="goal_owner">&nbsp;</div>
+				</div>
+			  </li>
+			  <li id="goal4" class="unclaimed">
+				<div class="float_left">
+				  <span class="goal_title">Air Traffic Controller</span> <br />
+				  <span class="goal_description">Most Contiguous </span>
+				  <img src="images/lake_icon.png" class="icon"/>
+				</div>
+				<div class="float_right border_left">
+				  <div class="goal_amount">+ 20 </div>
+				  <div class="goal_owner">&nbsp;</div>
+				</div>
+			  </li>
+			  <li id="goal5" class="unclaimed private">
+				<div class="float_left">
+				  <span class="goal_title">Air Traffic Controller</span> <br />
+				  <span class="goal_description">Most Contiguous </span>
+				  <img src="images/lake_icon.png" class="icon"/>
+				</div>
+				<div class="float_right border_left">
+				  <div class="goal_amount">+ 20 </div>
+				  <div class="goal_owner">&nbsp;</div>
+				</div>
+			  </li>
+			</ul>
+		  </div>
+		  <div id="player1_stats" class="player_stats">
+			<h3>P1</h3>
+		  </div>
+		  <div id="player2_stats" class="player_stats">
+			<h3>P2</h3>
+		  </div>
+		  <div id="player3_stats" class="player_stats">
+			<h3>P3</h3>
+		  </div>
+		  <div id="player4_stats" class="current_player_stats">
+			<h3>P4</h3>
+		  </div>
+		</div>
+		<div id="game_log">
+		  Gamelog
+		</div>
+	</body>
+</html>

@@ -1,0 +1,356 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  height:100%;
+  font-size:100%;
+  font-family:Helvetica, Arial, sans-serif;
+  background-color:#FFFFFF;
+ }
+ 
+ *{
+   -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+           box-sizing: border-box;
+ }
+
+
+#header {
+  background-color:#CCCCCC;
+  /*width:100%;*/
+  /*height:2.5%;*/
+  background:linear-gradient(#455660, #12191f);
+  font-size:1.3em;
+  color:#e1e7ea;
+  padding:7px 20px 7px 10px;
+  
+}
+
+.menu_icon{
+  margin-top:0;
+  padding:0 10px 0 10px;
+  vertical-align:middle;
+  /*margin-bottom:-5px;*/
+}
+
+#tile_supply{
+  /*background-color:#BBDDBB;*/
+  width:22%;
+  min-width:370px;
+  height:80%;
+  float:left;
+}
+
+#tile_count{
+  background-color:#F7F7F7;
+  font-size:1.1em;
+  padding:8px 10px 142px 10px;
+  border-bottom:1px solid #999999;
+}
+
+.section_heading{
+  font-size:1.1em;
+  font-weight:bold;
+}
+
+#a_supply{
+  background-image:url('../images/a_supply.png');
+  /*width:100px;*/
+  /*height:87px;*/
+  background-repeat:no-repeat;
+  padding:50px 36px 10px 36px;
+  margin:10px -15px 10px 50px;
+  color:#FFFFFF;
+  /*opacity: 0.8;*/
+}
+
+#b_supply{
+  background-image:url('../images/b_supply.png');
+  /*width:100px;*/
+  /*height:87px;*/
+  background-repeat:no-repeat;
+  padding:50px 36px 10px 36px;
+  margin:50px -15px 10px 0;
+  color:#FFFFFF;
+}
+
+#c_supply{
+  background-image:url('../images/c_supply.png');
+  /*width:100px;*/
+  /*height:87px;*/
+  background-repeat:no-repeat;
+  padding:50px 36px 10px 36px;
+  margin:10px -15px 10px 0;
+  color:#FFFFFF;
+}
+
+#real_estate{
+  background-color:#F7F7F7;
+  padding:8px 5px 8px 5px;
+  border-bottom:1px solid #999999;
+}
+
+#real_estate ul {
+  list-style:none;
+  margin:0;
+  padding:5px 5px 5px 5px;
+  font-size:0.8em;
+  font-weight:normal;
+}
+
+#real_estate ul li{
+  display:block;
+  border:1px solid #C9C9C9;
+  border-radius:3px;
+  background-color:#FCFCFC;
+  padding:6px 5px 40px 5px;
+  margin:5px 0 5px 0;
+  /*height:50%;*/
+}
+
+.inflation {
+  /*margin-top:3px;*/
+  margin-left:5px;
+  padding:6px 0 8px 0;
+  font-size:1.3em;
+  font-weight:bold;
+  width:55px;
+  margin-right:10px;
+  border-right:1px solid #C9C9C9;
+  float:left;
+}
+
+.tile_title{
+  padding: 8px 0 12px 35px;
+  margin:0 10px 0 0;
+  /*height:25px;*/
+  width:215px;
+  font-size:1.1em;
+  font-weight:bold;
+  border-right:1px solid #C9C9C9;
+  float:left;
+}
+
+.airport .tile_title{
+  background-image:url('../images/airplane_icon.png');
+  background-repeat:no-repeat;
+}
+
+.car .tile_title{
+  background-image:url('../images/car_icon.png');
+  background-repeat:no-repeat;
+}
+
+.office .tile_title{
+  background-image:url('../images/office_icon.png');
+  background-repeat:no-repeat;
+}
+
+.restaurant .tile_title{
+  background-image:url('../images/restaurant_icon.png');
+  background-repeat:no-repeat;
+}
+
+.school .tile_title{
+  background-image:url('../images/school_icon.png');
+  background-repeat:no-repeat;
+}
+
+.skyscraper .tile_title{
+  background-image:url('../images/skyscraper_icon.png');
+  background-repeat:no-repeat;
+}
+
+.tile_cost {
+  padding:10px 0 0 0;
+  text-align:center;
+  font-size:1em;
+  color:#FFFFFF;
+  margin-right:6px;
+  width:34px;
+  height:34px;
+  text-shadow: 0px 0px 3px black;
+  float:right;
+}
+
+.residential .tile_cost {
+  background-image:url('../images/green_tile_icon.png');
+  background-repeat:no-repeat;
+}
+
+.commercial .tile_cost {
+  background-image:url('../images/blue_tile_icon.png');
+  background-repeat:no-repeat;
+}
+
+.industrial .tile_cost {
+  background-image:url('../images/yellow_tile_icon.png');
+  background-repeat:no-repeat;
+}
+
+.government .tile_cost {
+  background-image:url('../images/grey_tile_icon.png');
+  background-repeat:no-repeat;
+}
+
+.redevelopment .tile_cost {
+  background-image:url('../images/black_tile_icon.png');
+  background-repeat:no-repeat;
+}
+
+#goals{
+  background-color:#F7F7F7;
+  padding: 8px 10px 8px 10px;
+  border-bottom:1px solid #999999;
+
+}
+
+#goals ul {
+  list-style:none;
+  margin:0;
+  padding:5px 5px 5px 5px;
+  font-size:0.8em;
+  font-weight:normal;
+}
+
+#goals ul li{
+  display:block;
+  border:1px solid #C9C9C9;
+  border-radius:3px;
+  background-color:#FCFCFC;
+  padding:7px 10px 43px 10px;
+  margin:5px 0 5px 0;
+  /*height:50%;*/
+}
+
+#goals ul .private {
+  background-color:#DDDDDD;
+  border:1px solid #AAAAAA;
+}
+
+#goals ul .private .border_left{
+  border-left:1px solid #AAAAAA;
+}
+
+.float_right{
+  float:right;
+}
+
+.float_left{
+  float:left;
+}
+
+.border_left{
+  border-left:1px solid #C9C9C9;
+}
+
+.border_right{
+  border-right:1px solid #C9C9C9;
+}
+
+.goal_title{
+  font-weight:bold;
+}
+
+.goal_description{
+  font-style:italic;
+}
+
+.goal_amount{
+  font-size:1.3em;
+  font-weight:bold;
+  float:left;
+  padding:8px 10px 10px 8px;
+}
+
+#goals .unclaimed .goal_owner{
+  background-image:url('../images/unclaimed_meeple.png');
+  width:35px;
+  height:35px;
+  float:right;
+  background-repeat:no-repeat;
+}
+
+#goals .player1 .goal_owner{
+  background-image:url('../images/player1_meeple.png');
+  width:35px;
+  height:35px;
+  float:right;
+  background-repeat:no-repeat;
+}
+
+#goals .player2 .goal_owner{
+  background-image:url('../images/player2_meeple.png');
+  width:35px;
+  height:35px;
+  float:right;
+  background-repeat:no-repeat;
+}
+
+#goals .player3 .goal_owner{
+  background-image:url('../images/player3_meeple.png');
+  width:35px;
+  height:35px;
+  float:right;
+  background-repeat:no-repeat;
+}
+
+#goals .player4 .goal_owner{
+  background-image:url('../images/player4_meeple.png');
+  width:35px;
+  height:35px;
+  float:right;
+  background-repeat:no-repeat;
+}
+
+.icon{
+  margin-top:0;
+  padding:0;
+  vertical-align:middle;
+  /*margin-bottom:-5px;*/
+}
+
+#base_tiles{
+  background-color:#B6FF77;
+}
+
+#borough{
+  background-color:#EBDBDB;
+  height:80%;
+  width:56%;
+  margin-right:-335px;
+  float:left;
+}
+
+#map{
+  /*width:860px;*/
+  /*height:763px;*/
+  border:1px dotted;
+}
+
+#player_info{
+  background-color:#FFEEDD;
+  width:22%;
+  min-width:335px;
+  height:80%;
+  float:right;
+}
+
+#player_details{
+  /*needs to be styled*/
+}
+
+.player_stats{
+  background-color:#FFFF72;
+}
+
+.current_player_stats{
+ background-color:#FFC964;
+}
+
+#game_log{
+  background-color:#CCEEFF;
+  width:100%;
+  height:15%;
+  clear:left;
+}
