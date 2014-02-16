@@ -44,7 +44,7 @@ html, body {
 #tile_count{
   background-color:#F7F7F7;
   font-size:1.1em;
-  padding:8px 10px 142px 10px;
+  padding:8px 10px 127px 10px;
   border-bottom:1px solid #999999;
 }
 
@@ -59,7 +59,7 @@ html, body {
   /*height:87px;*/
   background-repeat:no-repeat;
   padding:50px 36px 10px 36px;
-  margin:10px -15px 10px 50px;
+  margin:0 -15px 10px 50px;
   color:#FFFFFF;
   /*opacity: 0.8;*/
 }
@@ -70,7 +70,7 @@ html, body {
   /*height:87px;*/
   background-repeat:no-repeat;
   padding:50px 36px 10px 36px;
-  margin:50px -15px 10px 0;
+  margin:40px -15px 0 0;
   color:#FFFFFF;
 }
 
@@ -80,7 +80,7 @@ html, body {
   /*height:87px;*/
   background-repeat:no-repeat;
   padding:50px 36px 10px 36px;
-  margin:10px -15px 10px 0;
+  margin:0 -15px 10px 0;
   color:#FFFFFF;
 }
 
