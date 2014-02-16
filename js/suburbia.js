@@ -329,4 +329,6 @@ function randomize_tiles() {
 $.ready(function(){
   ctx = $('#map')[0].getContext('2d');
   randomize_tiles();
+$('#header').on('click',randomize_tiles);
 });
+
