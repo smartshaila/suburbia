@@ -445,7 +445,7 @@ Suburbia.nextTile = function () {
   }
 }
 
-$.ready(function(){
+$().ready(function(){
   Suburbia.fillStacks();
   $('#real_estate li').on('click', function() {
     var id = Number(this.id.substr(4,1));
