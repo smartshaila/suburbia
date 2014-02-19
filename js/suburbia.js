@@ -399,7 +399,7 @@ $.ready(function(){
 });
 
 Suburbia.fillStacks = function () {
-  Suburbia.set |= 'base';
+  Suburbia.set = Suburbia.set || 'base';
   Suburbia.a_start |= 18;
   Suburbia.b_start |= 15;
   Suburbia.c_start |= 22;
