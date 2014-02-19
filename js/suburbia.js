@@ -396,6 +396,7 @@ function selectTiles(tile_set, counts) {
 $.ready(function(){
   ctx = $('#map')[0].getContext('2d');
   randomize_tiles();
+<<<<<<< HEAD
 });
 
 Suburbia.fillStacks = function () {
@@ -423,3 +424,8 @@ Suburbia.nextTile = function () {
 		return 'No More Tiles';
 	}
 }
+=======
+$('#header').on('click',randomize_tiles);
+});
+
+>>>>>>> f8e0ee7c70fc819ed2feaaf52e540cd8baa496f1

@@ -8,7 +8,7 @@ html, body {
   background-color:#FFFFFF;
  }
  
- *{
+ *, *:after, *:before {
    -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
            box-sizing: border-box;
@@ -28,7 +28,7 @@ html, body {
 
 .menu_icon{
   margin-top:0;
-  padding:0 10px 0 10px;
+/*  padding:0 10px 0 10px;*/
   vertical-align:middle;
   /*margin-bottom:-5px;*/
 }
@@ -36,7 +36,7 @@ html, body {
 #tile_supply{
   /*background-color:#BBDDBB;*/
   width:22%;
-  min-width:370px;
+  min-width:375px;
   height:80%;
   float:left;
 }
@@ -44,12 +44,12 @@ html, body {
 #tile_count{
   background-color:#F7F7F7;
   font-size:1.1em;
-  padding:8px 10px 142px 10px;
+  padding:8px 10px 127px 10px;
   border-bottom:1px solid #999999;
 }
 
 .section_heading{
-  font-size:1.1em;
+  font-size:1em;
   font-weight:bold;
 }
 
@@ -59,7 +59,7 @@ html, body {
   /*height:87px;*/
   background-repeat:no-repeat;
   padding:50px 36px 10px 36px;
-  margin:10px -15px 10px 50px;
+  margin:0 -15px 10px 50px;
   color:#FFFFFF;
   /*opacity: 0.8;*/
 }
@@ -70,7 +70,7 @@ html, body {
   /*height:87px;*/
   background-repeat:no-repeat;
   padding:50px 36px 10px 36px;
-  margin:50px -15px 10px 0;
+  margin:40px -15px 0 0;
   color:#FFFFFF;
 }
 
@@ -80,7 +80,7 @@ html, body {
   /*height:87px;*/
   background-repeat:no-repeat;
   padding:50px 36px 10px 36px;
-  margin:10px -15px 10px 0;
+  margin:0 -15px 10px 0;
   color:#FFFFFF;
 }
 
@@ -108,27 +108,29 @@ html, body {
   /*height:50%;*/
 }
 
-.inflation {
+.inflation, .count {
   /*margin-top:3px;*/
   margin-left:5px;
-  padding:6px 0 8px 0;
+  padding:6px 10px 8px 0;
   font-size:1.3em;
   font-weight:bold;
   width:55px;
   margin-right:10px;
   border-right:1px solid #C9C9C9;
   float:left;
+  text-align:center;
 }
 
 .tile_title{
-  padding: 8px 0 12px 35px;
+  padding: 8px 8px 12px 35px;
   margin:0 10px 0 0;
   /*height:25px;*/
-  width:215px;
+  width:223px;
   font-size:1.1em;
   font-weight:bold;
   border-right:1px solid #C9C9C9;
   float:left;
+  text-align:center;
 }
 
 .airport .tile_title{
@@ -196,6 +198,31 @@ html, body {
 .redevelopment .tile_cost {
   background-image:url('../images/black_tile_icon.png');
   background-repeat:no-repeat;
+}
+
+#base_tiles{
+  background-color:#F7F7F7;
+  padding:8px 5px 8px 5px;
+/*  border-bottom:1px solid #999999;*/
+/*  background-color:#B6FF77;*/
+}
+
+#base_tiles ul {
+  list-style:none;
+  margin:0;
+  padding:5px 5px 5px 5px;
+  font-size:0.8em;
+  font-weight:normal;
+}
+
+#base_tiles ul li{
+  display:block;
+  border:1px solid #C9C9C9;
+  border-radius:3px;
+  background-color:#FCFCFC;
+  padding:6px 5px 40px 5px;
+  margin:5px 0 5px 0;
+  /*height:50%;*/
 }
 
 #goals{
@@ -308,10 +335,6 @@ html, body {
   padding:0;
   vertical-align:middle;
   /*margin-bottom:-5px;*/
-}
-
-#base_tiles{
-  background-color:#B6FF77;
 }
 
 #borough{
