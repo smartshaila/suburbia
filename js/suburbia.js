@@ -41,6 +41,20 @@ function Tile (name, type, cost, level, icon, effect) {
   this.effect = effect;
 }
 
+Tile.draw = function (draw_type, location) {
+  if (draw_type == "real_estate") {
+    var divName = '#tile' + location;
+    $(divName).removeClass();
+    $(divName).addClass(this.type).addClass(this.icon);
+    $(divName + ' .tile_title').text(this.name);
+    $(divName + ' .tile_cost').text('$' + this.cost);
+  } else if (location == "tooltip") {
+  
+  } else if (location == "board") {
+  
+  }
+}
+
 function Effect (timing, category, matching, range, amount) {
   // 0: Immediate
   // 1: Secondary
@@ -69,7 +83,7 @@ function Effect (timing, category, matching, range, amount) {
 }
 
 function drawBaseGrid() {
-	
+    
 }
 
 var tokens = {
@@ -85,66 +99,66 @@ var tokens = {
   
   suburb: new Tile('Suburb', 'residential', 3, 0, null, [new Effect(0,0,[],0,2)]),
   community_park: new Tile('Community Park', 'government', 4, 0, null, [
-	new Effect(0,3,[],0,-1),
-	new Effect(1,2,[{type:'commercial'},{type:'residential'},{type:'industrial'}],1,1)
+    new Effect(0,3,[],0,-1),
+    new Effect(1,2,[{type:'commercial'},{type:'residential'},{type:'industrial'}],1,1)
   ]),
   heavy_factory: new Tile('Heavy Factory', 'industrial', 3, 0, null, [
-	new Effect(0,3,[],0,1),
-	new Effect(1,2,[{type:'government'},{type:'residential'}],1,-1)
+    new Effect(0,3,[],0,1),
+    new Effect(1,2,[{type:'government'},{type:'residential'}],1,-1)
   ]),
   lake: new Tile('Lake', 'lake', 0, 0, null, [
-	new Effect(1,1,[{type:'industrial'},{type:'government'},{type:'residential'},{type:'commercial'}],1,2)
+    new Effect(1,1,[{type:'industrial'},{type:'government'},{type:'residential'},{type:'commercial'}],1,2)
   ]),
   
   business_supply: new Tile('Business Supply Store', 'commercial', 8, 1, null, [
-	new Effect(0,3,[],0,1),
-	new Effect(1,3,[{icon:'office'}],4,1)
+    new Effect(0,3,[],0,1),
+    new Effect(1,3,[{icon:'office'}],4,1)
   ]),
   convenience_store: new Tile('Convenience Store', 'commercial', 6, 1, null, [new Effect(0,3,[],0,1)]),
   fancy_restaurant: new Tile('Fancy Restaurant', 'commercial', 9, 1, 'restaurant', [
-	new Effect(0,3,[],0,3),
-	new Effect(1,3,[{icon:'restaurant'}],5,-1)
+    new Effect(0,3,[],0,3),
+    new Effect(1,3,[{icon:'restaurant'}],5,-1)
   ]),
   farm: new Tile('Farm', 'industrial', 9, 1, null, [
-	new Effect(0,2,[],0,-1),
-	new Effect(1,3,[{icon:'restaurant'}],4,1)
+    new Effect(0,2,[],0,-1),
+    new Effect(1,3,[{icon:'restaurant'}],4,1)
   ]),
   fast_food: new Tile('Fast Food Restaurant', 'commercial', 7, 1, 'restaurant', [
     new Effect(0,3,[],0,1),
-	new Effect(1,0,[{type:'residential'}],1,3)
+    new Effect(1,0,[{type:'residential'}],1,3)
   ]),
   freeway: new Tile('Freeway', 'industrial', 5, 1, null, [
-	new Effect(1,2,[{type:'residential'}],1,-1),
-	new Effect(1,3,[{type:'commercial'}],1,1)
+    new Effect(1,2,[{type:'residential'}],1,-1),
+    new Effect(1,3,[{type:'commercial'}],1,1)
   ]),
   landfill: new Tile('Landfill', 'industrial', 4, 1, null, [
-	new Effect(0,3,[],0,2),
-	new Effect(1,2,[{type:'industrial'},{type:'government'},{type:'residential'},{type:'commercial'}],1,-1)
+    new Effect(0,3,[],0,2),
+    new Effect(1,2,[{type:'industrial'},{type:'government'},{type:'residential'},{type:'commercial'}],1,-1)
   ]),
   hoa: new Tile("Homeowner's Association", 'residential', 6, 1, null, [
-	new Effect(0,0,[],0,1),
-	new Effect(1,1,[{type:'residential'}],4,2)
+    new Effect(0,0,[],0,1),
+    new Effect(1,1,[{type:'residential'}],4,2)
   ]),
   mint: new Tile('Mint', 'government', 15, 1, null, [
     new Effect(0,3,[],0,3),
-	new Effect(1,1,[{type:'government'}],2,2)
+    new Effect(1,1,[{type:'government'}],2,2)
   ]),
   mobile_home: new Tile('Mobile Home Community', 'residential', 4, 1, null, [new Effect(0,0,[],0,6)]),
   municipal_airport: new Tile('Municipal Airport', 'industrial', 6, 1, 'airport', [
-	new Effect(1,3,[{icon:'airport'}],4,1),
-	new Effect(1,2,[{type:'residential'}],1,-1)
+    new Effect(1,3,[{icon:'airport'}],4,1),
+    new Effect(1,2,[{type:'residential'}],1,-1)
   ]),
   office_building: new Tile('Office Building', 'commercial', 9, 1, 'office', [
-	new Effect(0,3,[],0,1),
-	new Effect(1,3,[{type:'commercial'}],1,1)
+    new Effect(0,3,[],0,1),
+    new Effect(1,3,[{type:'commercial'}],1,1)
   ]),
   parking_lot: new Tile('Parking Lot', 'commercial', 12, 1, null, [
-	new Effect(0,3,[],0,1),
-	new Effect(1,3,[{type:'commercial'},{type:'government'}],1,1)
+    new Effect(0,3,[],0,1),
+    new Effect(1,3,[{type:'commercial'},{type:'government'}],1,1)
   ]),
   slaughterhouse: new Tile('Slaughterhouse', 'industrial', 5, 1, null, [
-	new Effect(0,2,[],0,-2),
-	new Effect(1,3,[{icon:'restaurant'}],4,1)
+    new Effect(0,2,[],0,-2),
+    new Effect(1,3,[{icon:'restaurant'}],4,1)
   ]),
   waterfront: new Tile('Waterfront Realty', 'commercial', 6, 1, null, [new Effect(1,1,[{name:'Lake'}],6,2)]),
   
@@ -247,118 +261,118 @@ var tokens = {
   ]),
   
   apartments: new Tile('Apartments', 'residential', 12, 3, null, [
-	new Effect(0,0,[],0,5),
-	new Effect(1,0,[{type:'commercial'}],1,2)
+    new Effect(0,0,[],0,5),
+    new Effect(1,0,[{type:'commercial'}],1,2)
   ]),
   bnb: new Tile('Bed & Breakfast', 'residential', 9, 3, null, [
-	new Effect(0,0,[],0,2),
-	new Effect(1,0,[{type:'residential'}],2,1)
+    new Effect(0,0,[],0,2),
+    new Effect(1,0,[{type:'residential'}],2,1)
   ]),
   boutique: new Tile('Boutique', 'commercial', 9, 3, null, [
-	new Effect(0,3,[],0,1),
-	new Effect(1,2,[{type:'residential'}],1,1)
+    new Effect(0,3,[],0,1),
+    new Effect(1,2,[{type:'residential'}],1,1)
   ]),
   chip_fab: new Tile('Chip Fabrication Plant', 'industrial', 18, 3, null, [
-	new Effect(0,2,[],0,2),
-	new Effect(1,3,[{type:'commercial'}],2,1)
+    new Effect(0,2,[],0,2),
+    new Effect(1,3,[{type:'commercial'}],2,1)
   ]),
   condo: new Tile('Condominium', 'residential', 14, 3, null, [
-	new Effect(0,0,[],0,5),
-	new Effect(1,0,[{type:'commercial'}],1,3)
+    new Effect(0,0,[],0,5),
+    new Effect(1,0,[{type:'commercial'}],1,3)
   ]),
   high_school: new Tile('High School', 'government', 18, 3, 'school', [
-	new Effect(0,2,[],0,1),
-	new Effect(1,0,[{type:'residential'}],2,3)
+    new Effect(0,2,[],0,1),
+    new Effect(1,0,[{type:'residential'}],2,3)
   ]),
   hotel: new Tile('Hotel', 'commercial', 13, 3, null, [
-	new Effect(0,3,[],0,1),
-	new Effect(1,0,[{type:'residential'}],3,1)
+    new Effect(0,3,[],0,1),
+    new Effect(1,0,[{type:'residential'}],3,1)
   ]),
   int_airport: new Tile('International Airport', 'industrial', 18, 3, 'airport', [
-	new Effect(1,3,[{icon:'airport'}],4,1),
-	new Effect(1,2,[{icon:'airport'}],4,1),
-	new Effect(1,2,[{type:'residential'}],1,1)
+    new Effect(1,3,[{icon:'airport'}],4,1),
+    new Effect(1,2,[{icon:'airport'}],4,1),
+    new Effect(1,2,[{type:'residential'}],1,1)
   ]),
   epa: new Tile('Local EPA Office', 'government', 12, 3, 'office', [
-	new Effect(0,2,[],0,1),
-	new Effect(1,1,[{type:'industrial'}],4,2)
+    new Effect(0,2,[],0,1),
+    new Effect(1,1,[{type:'industrial'}],4,2)
   ]),
   middle_school: new Tile('Middle School', 'government', 10, 3, 'school', [
-	new Effect(0,2,[],0,1),
-	new Effect(1,0,[{type:'residential'}],2,2)
+    new Effect(0,2,[],0,1),
+    new Effect(1,0,[{type:'residential'}],2,2)
   ]),
   car_dealer: new Tile('New Car Dealership', 'commercial', 12, 3, 'car', [
-	new Effect(0,3,[],0,5),
-	new Effect(1,3,[{icon:'car'}],5,-2)
+    new Effect(0,3,[],0,5),
+    new Effect(1,3,[{icon:'car'}],5,-2)
   ]),
   pr_firm: new Tile('PR Firm', 'commercial', 20, 3, null, [
-	new Effect(0,3,[],0,-2),
-	new Effect(1,2,[],7,1)
+    new Effect(0,3,[],0,-2),
+    new Effect(1,2,[],7,1)
   ]),
   recycling_plant: new Tile('Recycling Plant', 'industrial', 17, 3, null, [
-	new Effect(0,2,[],0,1),
-	new Effect(1,2,[{type:'industrial'}],1,2)
+    new Effect(0,2,[],0,1),
+    new Effect(1,2,[{type:'industrial'}],1,2)
   ]),
   resort: new Tile('Resort', 'commercial', 16, 3, null, [
-	new Effect(0,3,[],0,1),
-	new Effect(1,0,[{type:'residential'}],4)
+    new Effect(0,3,[],0,1),
+    new Effect(1,0,[{type:'residential'}],4)
   ]),
   university: new Tile('University', 'government', 15, 3, null, [
-	new Effect(0,3,[],0,2),
-	new Effect(1,2,[{icon:'school'}],4,1)
+    new Effect(0,3,[],0,2),
+    new Effect(1,2,[{icon:'school'}],4,1)
   ])
 };
 
 var tileSets = {
-	base: [
-		['business_supply' , 2],
-		['convenience_store' , 2],
-		["fancy_restaurant" , 3],
-		["farm" , 2], 
-		["fast_food" , 2], 
-		["freeway" , 2], 
-		["landfill" , 2], 
-		["hoa" , 2], 
-		["mint" , 2], 
-		["mobile_home" , 2], 
-		["municipal_airport" , 2], 
-		["office_building" , 3], 
-		["parking_lot" , 2], 
-		["slaughterhouse" , 2], 
-		["waterfront" , 2], 
-		["burg_alspach", 2],
-		["domestic_airport" , 2], 
-		["elementary_school", 3],
-		["gas_station", 2],
-		["hostel", 2],
-		["housing_projects", 2],
-		["movie_theater", 2],
-		["casino", 2],
-		["museum", 2],
-		["bureaucracy", 2],
-		["postal_service", 2],
-		["power_station", 2],
-		["retirement_village", 2],
-		["skyscraper", 2], 
-		["shipping_center", 2], 
-		["stadium", 2], 
-		["warehouse", 2],
-		["apartments", 2],
-		["bnb", 2], 
-		["boutique", 2], 
-		["chip_fab", 2], 
-		["condo", 2], 
-		["high_school", 3],
-		["hotel", 2], 
-		["int_airport", 2],
-		["epa", 2], 
-		["middle_school", 3],
-		["car_dealer", 2],
-		["pr_firm", 2], 
-		["recycling_plant", 2],
-		["resort", 2], 
-		["university", 2]
-	]
+    base: [
+        ['business_supply' , 2],
+        ['convenience_store' , 2],
+        ["fancy_restaurant" , 3],
+        ["farm" , 2], 
+        ["fast_food" , 2], 
+        ["freeway" , 2], 
+        ["landfill" , 2], 
+        ["hoa" , 2], 
+        ["mint" , 2], 
+        ["mobile_home" , 2], 
+        ["municipal_airport" , 2], 
+        ["office_building" , 3], 
+        ["parking_lot" , 2], 
+        ["slaughterhouse" , 2], 
+        ["waterfront" , 2], 
+        ["burg_alspach", 2],
+        ["domestic_airport" , 2], 
+        ["elementary_school", 3],
+        ["gas_station", 2],
+        ["hostel", 2],
+        ["housing_projects", 2],
+        ["movie_theater", 2],
+        ["casino", 2],
+        ["museum", 2],
+        ["bureaucracy", 2],
+        ["postal_service", 2],
+        ["power_station", 2],
+        ["retirement_village", 2],
+        ["skyscraper", 2], 
+        ["shipping_center", 2], 
+        ["stadium", 2], 
+        ["warehouse", 2],
+        ["apartments", 2],
+        ["bnb", 2], 
+        ["boutique", 2], 
+        ["chip_fab", 2], 
+        ["condo", 2], 
+        ["high_school", 3],
+        ["hotel", 2], 
+        ["int_airport", 2],
+        ["epa", 2], 
+        ["middle_school", 3],
+        ["car_dealer", 2],
+        ["pr_firm", 2], 
+        ["recycling_plant", 2],
+        ["resort", 2], 
+        ["university", 2]
+    ]
 };
 
 var ctx = null;
@@ -379,24 +393,19 @@ function randomize_tiles() {
 }
 
 function selectTiles(tile_set, counts) {
-	choices = [1,2,3].map(function(level) {return $.map(tile_set.filter(function(t){
-		return tokens[t[0]].level == level;
-	}).map(function(t) {
-		return Array.apply(null, new Array(t[1])).map(String.prototype.valueOf, t[0]);
-	}), function(i){return i;})});
-	return choices.map(function(level_array, index) {
-		var chosen = [];
-		for (var i=0; i<counts[index]; i++) {
-			chosen.push(level_array.splice(Math.floor(Math.random() * level_array.length), 1)[0]);
-		}
-		return chosen;
-	});
+    choices = [1,2,3].map(function(level) {return $.map(tile_set.filter(function(t){
+        return tokens[t[0]].level == level;
+    }).map(function(t) {
+        return Array.apply(null, new Array(t[1])).map(String.prototype.valueOf, t[0]);
+    }), function(i){return i;})});
+    return choices.map(function(level_array, index) {
+        var chosen = [];
+        for (var i=0; i<counts[index]; i++) {
+            chosen.push(level_array.splice(Math.floor(Math.random() * level_array.length), 1)[0]);
+        }
+        return chosen;
+    });
 };
-
-$.ready(function(){
-  ctx = $('#map')[0].getContext('2d');
-  randomize_tiles();
-});
 
 Suburbia.fillStacks = function () {
   Suburbia.set = Suburbia.set || 'base';
@@ -409,17 +418,34 @@ Suburbia.fillStacks = function () {
   Suburbia.stacks.b = stackList[1];
   Suburbia.stacks.c = stackList[2];
   Suburbia.real_estate = [];
-  for (var i=0;i<7;i++){Suburbia.real_estate.push(Suburbia.nextTile());}
+  Suburbia.updateRealEstate();
+}
+
+Suburbia.updateRealEstate = function () {
+  while (Suburbia.real_estate.length < 7) {
+    Suburbia.real_estate.push(Suburbia.nextTile());
+  }
+  Suburbia.real_estate.forEach(function (tile, i) {
+    tokens[tile].draw('real_estate', i);
+  });
+  Object.keys(Suburbia.stacks).forEach(function(stack){
+    $('#' + stack + '_supply').text(Suburbia.stacks[stack].length);
+  });
 }
 
 Suburbia.nextTile = function () {
-	if (Suburbia.stacks.a.length) {
-		return Suburbia.stacks.a.pop();
-	} else if (Suburbia.stacks.b.length) {
-		return Suburbia.stacks.b.pop();
-	} else if (Suburbia.stacks.c.length) {
-		return Suburbia.stacks.c.pop();
-	} else {
-		return 'No More Tiles';
-	}
+  if (Suburbia.stacks.a.length) {
+    return Suburbia.stacks.a.pop();
+  } else if (Suburbia.stacks.b.length) {
+    return Suburbia.stacks.b.pop();
+  } else if (Suburbia.stacks.c.length) {
+    return Suburbia.stacks.c.pop();
+  } else {
+    return 'No More Tiles';
+  }
 }
+
+$.ready(function(){
+  fillStacks();
+  ctx = $('#map')[0].getContext('2d');
+});
