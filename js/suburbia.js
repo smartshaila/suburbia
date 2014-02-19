@@ -26,19 +26,19 @@ Suburbia.startingBoard = function() {
   tiles.push({x:2,  y:-2, content:tokens.Full_Starter});
   tiles.push({x:3,  y:-3, content:tokens.SW_Starter});
   tiles.push({x:3,  y:-2, content:tokens.W_Starter});
-  tiles.push({x:0,  y:0,  content:tokens.Suburb});
-  tiles.push({x:0,  y:1,  content:tokens.Community_Park});
-  tiles.push({x:0,  y:2,  content:tokens.Heavy_Factory});
+  tiles.push({x:0,  y:0,  content:tokens.suburb});
+  tiles.push({x:0,  y:1,  content:tokens.community_park});
+  tiles.push({x:0,  y:2,  content:tokens.heavy_factory});
   return tiles;
 }
 
-function Tile (name, type, cost, level, icon, Effect) {
+function Tile (name, type, cost, level, icon, effect) {
   this.name = name;
   this.type = type;
   this.cost = cost;
   this.level = level;
   this.icon = icon;
-  this.Effect = Effect;
+  this.effect = effect;
 }
 
 function Effect (timing, category, matching, range, amount) {
@@ -309,6 +309,58 @@ var tokens = {
   ])
 };
 
+var tileSets = {
+	base: [
+		['business_supply' , 2],
+		['convenience_store' , 2],
+		["fancy_restaurant" , 3],
+		["farm" , 2], 
+		["fast_food" , 2], 
+		["freeway" , 2], 
+		["landfill" , 2], 
+		["hoa" , 2], 
+		["mint" , 2], 
+		["mobile_home" , 2], 
+		["municipal_airport" , 2], 
+		["office_building" , 3], 
+		["parking_lot" , 2], 
+		["slaughterhouse" , 2], 
+		["waterfront" , 2], 
+		["burg_alspach", 2],
+		["domestic_airport" , 2], 
+		["elementary_school", 3],
+		["gas_station", 2],
+		["hostel", 2],
+		["housing_projects", 2],
+		["movie_theater", 2],
+		["casino", 2],
+		["museum", 2],
+		["bureaucracy", 2],
+		["postal_service", 2],
+		["power_station", 2],
+		["retirement_village", 2],
+		["skyscraper", 2], 
+		["shipping_center", 2], 
+		["stadium", 2], 
+		["warehouse", 2],
+		["apartments", 2],
+		["bnb", 2], 
+		["boutique", 2], 
+		["chip_fab", 2], 
+		["condo", 2], 
+		["high_school", 3],
+		["hotel", 2], 
+		["int_airport", 2],
+		["epa", 2], 
+		["middle_school", 3],
+		["car_dealer", 2],
+		["pr_firm", 2], 
+		["recycling_plant", 2],
+		["resort", 2], 
+		["university", 2]
+	]
+};
+
 var ctx = null;
 
 function randomize_tiles() {
@@ -316,7 +368,7 @@ function randomize_tiles() {
     divName = '#tile' + id;
     tile = {};
     do {
-      tile = tokens[Object.keys(tokens)[Math.floor(Math.random() * (Object.keys(tokens).length + 1))]];
+      tile = tokens[Object.keys(tokens)[Math.floor(Math.random() * (Object.keys(tokens).length))]];
     } while (typeof(tile.type) ==  'undefined' || tile.type == 'placeholder')
     $(divName).removeClass();
     $(divName).addClass(tile.type).addClass(tile.icon);
@@ -326,7 +378,48 @@ function randomize_tiles() {
   });
 }
 
+function selectTiles(tile_set, counts) {
+	choices = [1,2,3].map(function(level) {return $.map(tile_set.filter(function(t){
+		return tokens[t[0]].level == level;
+	}).map(function(t) {
+		return Array.apply(null, new Array(t[1])).map(String.prototype.valueOf, t[0]);
+	}), function(i){return i;})});
+	return choices.map(function(level_array, index) {
+		var chosen = [];
+		for (var i=0; i<counts[index]; i++) {
+			chosen.push(level_array.splice(Math.floor(Math.random() * level_array.length), 1)[0]);
+		}
+		return chosen;
+	});
+};
+
 $.ready(function(){
   ctx = $('#map')[0].getContext('2d');
   randomize_tiles();
 });
+
+Suburbia.fillStacks = function () {
+  Suburbia.set |= 'base';
+  Suburbia.a_start |= 18;
+  Suburbia.b_start |= 15;
+  Suburbia.c_start |= 22;
+  Suburbia.stacks = {};
+  var stackList = selectTiles(tileSets[Suburbia.set], [Suburbia.a_start, Suburbia.b_start, Suburbia.c_start]);
+  Suburbia.stacks.a = stackList[0];
+  Suburbia.stacks.b = stackList[1];
+  Suburbia.stacks.c = stackList[2];
+  Suburbia.real_estate = [];
+  for (var i=0;i<7;i++){Suburbia.real_estate.push(Suburbia.nextTile());}
+}
+
+Suburbia.nextTile = function () {
+	if (Suburbia.stacks.a.length) {
+		return Suburbia.stacks.a.pop();
+	} else if (Suburbia.stacks.b.length) {
+		return Suburbia.stacks.b.pop();
+	} else if (Suburbia.stacks.c.length) {
+		return Suburbia.stacks.c.pop();
+	} else {
+		return 'No More Tiles';
+	}
+}
