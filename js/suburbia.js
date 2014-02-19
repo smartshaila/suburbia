@@ -41,7 +41,7 @@ function Tile (name, type, cost, level, icon, effect) {
   this.effect = effect;
 }
 
-Tile.draw = function (draw_type, location) {
+Tile.prototype.draw = function (draw_type, location) {
   if (draw_type == "real_estate") {
     var divName = '#tile' + location;
     $(divName).removeClass();
