@@ -446,6 +446,11 @@ Suburbia.nextTile = function () {
 }
 
 $.ready(function(){
-  fillStacks();
+  Suburbia.fillStacks();
+  $('#real_estate li').on('click', function() {
+    var id = Number(this.id.substr(4,1));
+    console.log(Suburbia.real_estate.splice(id,1));
+    Suburbia.updateRealEstate();
+  });
   ctx = $('#map')[0].getContext('2d');
 });
