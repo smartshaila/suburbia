@@ -15,6 +15,34 @@ html, body {
  }
 
 
+#container1{
+	float:left;
+	width:100%;
+  	background-color:#F7F7F7;
+	position:relative;
+	right:56%;
+	border-right:1px black solid;
+}
+
+#container2{
+	float:left;
+	width:100%;
+	background:yellow;
+	position:relative;
+	right:22%;
+	border-right:1px black solid;
+	
+	
+}
+
+#container3{
+	float:left;
+	width:100%;
+	background:green;
+	overflow:hidden;
+	position:relative;	
+}
+
 #header {
   background-color:#CCCCCC;
   /*width:100%;*/
@@ -35,22 +63,31 @@ html, body {
 
 #tile_supply{
   /*background-color:#BBDDBB;*/
-  width:22%;
-  min-width:375px;
-  height:80%;
+/*  background-color:#F7F7F7;*/
+/*  width:22%;*/
+/*  min-width:380px;*/
+	width:400px;
+/*  height:80%;*/
   float:left;
+/*  position:relative;*/
+/*  left:78%;*/
 }
 
 #tile_count{
   background-color:#F7F7F7;
   font-size:1.1em;
   padding:8px 10px 127px 10px;
-  border-bottom:1px solid #999999;
+/*  border-bottom:1px solid #999999;*/
+  border:1px solid #AAAAAA;
+  border-radius:10px;
+  margin: 10px;
+
 }
 
 .section_heading{
   font-size:1em;
   font-weight:bold;
+  padding-left:5px;
 }
 
 #a_supply{
@@ -87,7 +124,10 @@ html, body {
 #real_estate{
   background-color:#F7F7F7;
   padding:8px 5px 8px 5px;
-  border-bottom:1px solid #999999;
+/*  border-bottom:1px solid #999999;*/
+  border:1px solid #AAAAAA;
+  border-radius:10px;
+  margin: 10px;
 }
 
 #real_estate ul {
@@ -205,6 +245,9 @@ html, body {
   padding:8px 5px 8px 5px;
 /*  border-bottom:1px solid #999999;*/
 /*  background-color:#B6FF77;*/
+	border:1px solid #AAAAAA;
+	border-radius:10px;
+	margin:10px;
 }
 
 #base_tiles ul {
@@ -228,8 +271,10 @@ html, body {
 #goals{
   background-color:#F7F7F7;
   padding: 8px 10px 8px 10px;
-  border-bottom:1px solid #999999;
-
+/*  border-bottom:1px solid #999999;*/
+border:1px solid #AAAAAA;
+border-radius:10px;
+margin: 10px;
 }
 
 #goals ul {
@@ -337,12 +382,17 @@ html, body {
   /*margin-bottom:-5px;*/
 }
 
+#content{
+/*	background-color:red;*/
+/*	margin-right:-335px;*/
+  	float:left;
+/*  position:relative;*/
+/*	left:78%;  */
+/*	width:50%;*/
+}
+
 #borough{
   background-color:#EBDBDB;
-  height:80%;
-  width:56%;
-  margin-right:-335px;
-  float:left;
 }
 
 #map{
@@ -351,12 +401,22 @@ html, body {
   border:1px dotted;
 }
 
+#game_log{
+  background-color:#CCEEFF;
+/*  position:relative;*/
+/*  bottom:0px;*/
+/*width:100%;*/
+/*  clear:left;*/
+}
+
 #player_info{
-  background-color:#FFEEDD;
-  width:22%;
-  min-width:335px;
-  height:80%;
+/*  background-color:#FFEEDD;*/
+/*  width:22%;*/
+/*  min-width:335px;*/
+  width:335px;
   float:right;
+/*  position:relative;*/
+/*  left:78%;*/
 }
 
 #player_details{
@@ -369,11 +429,4 @@ html, body {
 
 .current_player_stats{
  background-color:#FFC964;
-}
-
-#game_log{
-  background-color:#CCEEFF;
-  width:100%;
-  height:15%;
-  clear:left;
 }
