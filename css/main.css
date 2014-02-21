@@ -90,33 +90,39 @@ html, body {
 
 #a_supply{
   background-image:url('../images/a_supply.png');
-  /*width:100px;*/
-  /*height:87px;*/
+  width:92px;
+  height:80px;
   background-repeat:no-repeat;
-  padding:50px 36px 10px 36px;
+/*  padding:50px 36px 10px 36px;*/
+  padding-top:50px;
   margin:0 -15px 10px 50px;
   color:#FFFFFF;
+  text-align:center;
   /*opacity: 0.8;*/
 }
 
 #b_supply{
   background-image:url('../images/b_supply.png');
-  /*width:100px;*/
-  /*height:87px;*/
+  width:92px;
+  height:80px;
   background-repeat:no-repeat;
-  padding:50px 36px 10px 36px;
+/*  padding:50px 36px 10px 36px;*/
+  padding-top:50px;
   margin:40px -15px 0 0;
   color:#FFFFFF;
+  text-align:center;
 }
 
 #c_supply{
   background-image:url('../images/c_supply.png');
-  /*width:100px;*/
-  /*height:87px;*/
+  width:92px;
+  height:80px;
   background-repeat:no-repeat;
-  padding:50px 36px 10px 36px;
+/*  padding:50px 36px 10px 36px;*/
+  padding-top:50px;
   margin:0 -15px 10px 0;
   color:#FFFFFF;
+  text-align:center;
 }
 
 #real_estate{
@@ -412,7 +418,7 @@ margin: 10px;
   border:1px solid #C9C9C9;
   border-radius:3px;
 /*background-color:#DBE7Ed;*/
-/*  background-color:#FCFCFC;*/
+  background-color:#FCFCFC;
   padding:5px 5px 48px 5px;
   margin:5px 0 5px 0;
   /*height:50%;*/
@@ -527,7 +533,7 @@ margin: 10px;
 /*	background-color:#edf3f6;*/
 /*	border-radius:25px;*/
 	float:right;
-	margin: 4px 10px 4px 8px;
+	margin: 4px 10px 4px 10px;
 	font-size:1.2em;
 	text-align:center;
 	font-weight:bold;
@@ -615,7 +621,7 @@ margin: 10px;
 	height:35px;
 /*	border-radius:25px;*/
 	float:right;
-	margin: 12px 20px 0px 0px;
+	margin: 12px 10px 0px 5px;
 	font-size:1.25em;
 	text-align:center;
 	font-weight:bold;
@@ -633,12 +639,12 @@ margin: 10px;
 	height:35px;
 /*	border-radius:25px;*/
 	float:right;
-	margin: 12px 20px 0px 0px;
+	margin: 12px 18px 0px 5px;
 	font-size:1.25em;
 	text-align:center;
 	font-weight:bold;
 	padding-top:2px;
-	padding-left:22px;
+	padding-left:24px;
 	color:#000000;
 }
 
@@ -683,7 +689,8 @@ margin: 10px;
 }
 
 #player_stats ul .current_player{
-/* background-color:#FFC964;*/
+ background-color:#FFFAE8;
+ border:1px #C4B370 solid;
 }
 /*.player_stats{
   background-color:#FFFF72;
