@@ -728,3 +728,31 @@ margin: 10px;
 /*  clear:left;*/
 }
 
+.tile_hover{
+	position:absolute;
+	width:250px;
+	height:230px;
+	z-index:100;
+	left:385px;
+	top:143px;
+	text-align:center;
+	border:1px solid #5d5d5d;
+	background-color:#FFFFFF;
+	border-radius:15px;
+}
+
+.notch {
+	position:absolute;
+	z-index:101;
+	top:100px;
+	left:-15px;
+/*	left:370px;*/
+/*	top:243px;*/
+    width: 0; 
+	height: 0; 
+	border-top: 15px solid transparent;
+	border-bottom: 15px solid transparent; 
+	border-right:15px solid #5d5d5d;
+	}
+
+
