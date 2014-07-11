@@ -50,7 +50,11 @@ Tile.prototype.draw = function (draw_type, location) {
     $(divName + ' .tile_title').text(this.name);
     $(divName + ' .tile_cost').text('$' + this.cost);
   } else if (draw_type == "tooltip") {
-  
+    var container = $('<div>').addClass('tile_hover').css('background-image', 'url("' + this.image + '")');
+	container.append($('<div>').addClass('notch'));
+	var reTile = $('#tile' + location);
+	$('#real_estate').append(container);
+	container.css('top', reTile.offset().top + (reTile.outerHeight() / 2) - (container.outerHeight() / 2));
   } else if (draw_type == "board") {
     if (this.image.indexOf('.png') == -1) {
 	  var hex = grid.GetHexByCoOrds(location.x + 5, location.y + 4);
@@ -341,6 +345,8 @@ var tokens = {
   ])
 };
 
+Object.keys(tokens).forEach(function(t){tokens[t].image = t.indexOf("Starter") > -1 ? t : 'images/' + t + '.png'});
+
 var tileSets = {
     base: [
         ['business_supply' , 2],
@@ -502,6 +508,12 @@ $().ready(function(){
     var id = Number(this.id.substr(4,1));
     console.log(Suburbia.real_estate.splice(id,1));
     Suburbia.updateRealEstate();
+  });
+  $('#real_estate li').hover(function() {
+    var id = Number(this.id.substr(4,1));
+	tokens[Suburbia.real_estate[id]].draw('tooltip', id);
+  }, function() {
+	$('.tile_hover').remove();
   });
   HT.Hexagon.setRegularSize(40);
   ctx = $('#map')[0].getContext('2d');
