@@ -27,6 +27,10 @@
 		  </div>
 		  <div id="real_estate">
 			<div class="section_heading">Real Estate</div>
+			<div class="tile_hover">
+				<div class="notch">&nbsp;</div>
+				<img src="images/business_supply.png">
+			</div>
 			<ul>
 				<li id="tile6" class="residential airport">
 				  <div class="inflation">+ $10</div>
@@ -102,19 +106,22 @@
 			  <li id="goal1" class="unclaimed">
 				<div class="float_left">
 				  <span class="goal_title">Air Traffic Controller</span> <br />
-				  <span class="goal_description">Most Contiguous </span>
-				  <img src="images/lake_icon.png" class="icon"/>
+				  <span class="goal_description">Most </span>
+				  <img src="images/airport_icon.png" class="icon"/>
 				</div>
 				<div class="float_right border_left">
 				  <div class="goal_amount">+ 20 </div>
 				  <div class="goal_owner">&nbsp;</div>
 				</div>
 			  </li>
-			  <li id="goal2" class="unclaimed">
+			  <li id="goal2" class="player2">
 				<div class="float_left">
 				  <span class="goal_title">Environmentalist</span> <br />
-				  <span class="goal_description">Most Contiguous </span>
-				  <img src="images/lake_icon.png" class="icon"/>
+				  <span class="goal_description">Lowest </span>
+				  <img src="images/investor_icon.png" class="icon"/>
+			    <img src="images/miser_icon.png" class="icon"/>
+				<img src="images/luminary_icon.png" class="icon"/>
+				<img src="images/miscreant_icon.png" class="icon"/>
 				</div>
 				<div class="float_right border_left">
 				  <div class="goal_amount">+ 10 </div>
@@ -124,30 +131,34 @@
 			  <li id="goal3" class="player1">
 				<div class="float_left">
 				  <span class="goal_title">Libertarian</span> <br />
-				  <span class="goal_description">Most Contiguous </span>
-				  <img src="images/lake_icon.png" class="icon"/>
+				  <span class="goal_description">Fewest </span>
+				  <img src="images/government_icon.png" class="icon"/>
+				  <img src="images/residential_icon.png" class="icon"/>
+				  <img src="images/commercial_icon.png" class="icon"/>
+				  <img src="images/industrial_icon.png" class="icon"/>
 				</div>
 				<div class="float_right border_left">
 				  <div class="goal_amount">+ 20 </div>
 				  <div class="goal_owner">&nbsp;</div>
 				</div>
 			  </li>
-			  <li id="goal4" class="unclaimed">
+			  <li id="goal4" class="player3">
 				<div class="float_left">
-				  <span class="goal_title">Aquatic Engineer</span> <br />
-				  <span class="goal_description">Most Contiguous </span>
-				  <img src="images/lake_icon.png" class="icon"/>
+				  <span class="goal_title">Socialist</span> <br />
+				  <span class="goal_description">Highest </span>
+				  <img src="images/coin_icon.png" class="icon"/>
 				</div>
 				<div class="float_right border_left">
 				  <div class="goal_amount">+ 20 </div>
 				  <div class="goal_owner">&nbsp;</div>
 				</div>
 			  </li>
-			  <li id="goal5" class="unclaimed private">
+			  <li id="goal5" class="player4 private">
 				<div class="float_left">
 				  <span class="goal_title">Harbormaster</span> <br />
 				  <span class="goal_description">Most Contiguous </span>
 				  <img src="images/lake_icon.png" class="icon"/>
+				<img src="images/investment_icon.png" class="icon"/>
 				</div>
 				<div class="float_right border_left">
 				  <div class="goal_amount">+ 20 </div>
@@ -156,19 +167,57 @@
 			  </li>
 			</ul>
 		  </div>
-		  <div id="player1_stats" class="player_stats">
-			<h3>P1</h3>
-		  </div>
-		  <div id="player2_stats" class="player_stats">
-			<h3>P2</h3>
-		  </div>
-		  <div id="player3_stats" class="player_stats">
-			<h3>P3</h3>
-		  </div>
-		  <div id="player4_stats" class="current_player_stats">
-			<h3>P4</h3>
-		  </div>
-		</div>
+		  <div id="player_stats">
+			<span class="section_heading">Player Stats</span>
+			<ul>
+				<li id="player1_stats" class="player1">
+					<div class="player_icon">P1</div>
+					<div class="separator">&nbsp;</div>
+						<div class="player_population">90</div>
+						<div class="player_reputation">7</div>
+						<div class="player_money">10</div>
+						<div class="player_income">7</div>
+				</li>
+				<li id="player2_stats" class="player2">
+					<div class="player_icon">P2</div>
+					<div class="separator">&nbsp;</div>
+						<div class="player_population">155</div>
+						<div class="player_reputation">10</div>
+						<div class="player_money">50</div>
+						<div class="player_income">5</div>
+				</li>
+				<li id="player3_stats" class="player3">
+					<div class="player_icon">P3</div>
+						<div class="separator">&nbsp;</div>
+							<div class="player_population">35</div>
+							<div class="player_reputation">-1</div>
+							<div class="player_money">50</div>
+							<div class="player_income">15</div>
+				</li>
+				<li id="player4_stats" class="player4 current_player">
+					<div class="player_icon">P4</div>
+					<div class="separator">&nbsp;</div>
+						<div class="player_population">8</div>
+						<div class="player_reputation">10</div>
+						<div class="player_money">5</div>
+						<div class="player_income">15</div>
+				</li>
+			</ul>
+			</div>
+		
+		<!-- <div id="player1_stats" class="player_stats">
+					<h3>P1</h3>
+				  </div>
+				  <div id="player2_stats" class="player_stats">
+					<h3>P2</h3>
+				  </div>
+				  <div id="player3_stats" class="player_stats">
+					<h3>P3</h3>
+				  </div>
+				  <div id="player4_stats" class="current_player_stats">
+					<h3>P4</h3>
+				  </div>
+				 --></div>
 				<!-- </div>
 			</div>
 		</div> -->

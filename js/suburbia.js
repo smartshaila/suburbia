@@ -115,7 +115,7 @@ var tokens = {
   W_Starter: new Tile('Starter', 'placeholder', 0, 0, null, [], 'W_Starter'),
   Starter: new Tile('Starter', 'placeholder', 0, 0, null, [], 'Starter'),
   
-  suburb: new Tile('Suburb', 'residential', 3, 0, null, [new Effect(0,0,[],0,2)]),
+  suburbs: new Tile('Suburbs', 'residential', 3, 0, null, [new Effect(0,0,[],0,2)]),
   community_park: new Tile('Community Park', 'government', 4, 0, null, [
     new Effect(0,3,[],0,-1),
     new Effect(1,2,[{type:'commercial'},{type:'residential'},{type:'industrial'}],1,1)
