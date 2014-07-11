@@ -17,13 +17,13 @@ Suburbia.startingBoard = function() {
   
   tiles.push({x:-3, y:0,  content:tokens.SE_Starter});
   tiles.push({x:-3, y:1,  content:tokens.E_Starter});
-  tiles.push({x:-2, y:0,  content:tokens.Full_Starter});
+  tiles.push({x:-2, y:0,  content:tokens.Starter});
   tiles.push({x:-1, y:-1, content:tokens.S_Starter});
-  tiles.push({x:-1, y:0,  content:tokens.Full_Starter});
-  tiles.push({x:0,  y:-1, content:tokens.Full_Starter});
+  tiles.push({x:-1, y:0,  content:tokens.Starter});
+  tiles.push({x:0,  y:-1, content:tokens.Starter});
   tiles.push({x:1,  y:-2, content:tokens.S_Starter});
-  tiles.push({x:1,  y:-1, content:tokens.Full_Starter});
-  tiles.push({x:2,  y:-2, content:tokens.Full_Starter});
+  tiles.push({x:1,  y:-1, content:tokens.Starter});
+  tiles.push({x:2,  y:-2, content:tokens.Starter});
   tiles.push({x:3,  y:-3, content:tokens.SW_Starter});
   tiles.push({x:3,  y:-2, content:tokens.W_Starter});
   tiles.push({x:0,  y:0,  content:tokens.suburb});
@@ -32,13 +32,14 @@ Suburbia.startingBoard = function() {
   return tiles;
 }
 
-function Tile (name, type, cost, level, icon, effect) {
+function Tile (name, type, cost, level, icon, effect, image) {
   this.name = name;
   this.type = type;
   this.cost = cost;
   this.level = level;
   this.icon = icon;
   this.effect = effect;
+  this.image = image;
 }
 
 Tile.prototype.draw = function (draw_type, location) {
@@ -48,10 +49,27 @@ Tile.prototype.draw = function (draw_type, location) {
     $(divName).addClass(this.type).addClass(this.icon);
     $(divName + ' .tile_title').text(this.name);
     $(divName + ' .tile_cost').text('$' + this.cost);
-  } else if (location == "tooltip") {
+  } else if (draw_type == "tooltip") {
   
-  } else if (location == "board") {
-  
+  } else if (draw_type == "board") {
+    if (this.image.indexOf('.png') == -1) {
+	  var hex = grid.GetHexByCoOrds(location.x + 5, location.y + 4);
+	  hex.fillStyle = 'blue';
+	  switch(this.image) {
+	    case 'SE_Starter': hex.fillPath = [{x:'center', y:2}, {x:2, y:2}, {x:3, y:3}, {x:'center', y:3}]; break;
+		case 'SW_Starter': hex.fillPath = [{x:5, y:5}, {x:'center', y:5}, {x:'center', y:4}, {x:4, y:4}]; break;
+		case 'NE_Starter': hex.fillPath = [{x:'center', y:2}, {x:2, y:2}, {x:1, y:1}, {x:'center', y:1}]; break;
+		case 'NW_Starter': hex.fillPath = [{x:5, y:5}, {x:'center', y:5}, {x:'center', y:0}, {x:0, y:0}]; break;
+		case 'S_Starter': hex.fillPath = [{x:5, y:5}, {x:2, y:2}, {x:3, y:3}, {x:4, y:4}]; break;
+		case 'N_Starter': hex.fillPath = [{x:5, y:5}, {x:2, y:2}, {x:1, y:1}, {x:0, y:0}]; break;
+		case 'W_Starter': hex.fillPath = [{x:'center', y:0}, {x:'center', y:4}, {x:4, y:4}, {x:5, y:5}, {x:0, y:0}]; break;
+		case 'E_Starter': hex.fillPath = [{x:'center', y:0}, {x:'center', y:3}, {x:3, y:3}, {x:2, y:2}, {x:1, y:1}]; break;
+		case 'Starter': hex.fillPath = [{x:0, y:0}, {x:1, y:1}, {x:2, y:2}, {x:3, y:3}, {x:4, y:4}, {x:5, y:5}]; break;
+	  }
+	  hex.draw(ctx);
+	} else {
+	  // Display image?
+	}
   }
 }
 
@@ -87,15 +105,15 @@ function drawBaseGrid() {
 }
 
 var tokens = {
-  SE_Starter: new Tile('Starter', 'placeholder', 0, 0, null, []),
-  SW_Starter: new Tile('Starter', 'placeholder', 0, 0, null, []),
-  NE_Starter: new Tile('Starter', 'placeholder', 0, 0, null, []),
-  NW_Starter: new Tile('Starter', 'placeholder', 0, 0, null, []),
-  S_Starter: new Tile('Starter', 'placeholder', 0, 0, null, []),
-  N_Starter: new Tile('Starter', 'placeholder', 0, 0, null, []),
-  E_Starter: new Tile('Starter', 'placeholder', 0, 0, null, []),
-  W_Starter: new Tile('Starter', 'placeholder', 0, 0, null, []),
-  Starter: new Tile('Starter', 'placeholder', 0, 0, null, []),
+  SE_Starter: new Tile('Starter', 'placeholder', 0, 0, null, [], 'SE_Starter'),
+  SW_Starter: new Tile('Starter', 'placeholder', 0, 0, null, [], 'SW_Starter'),
+  NE_Starter: new Tile('Starter', 'placeholder', 0, 0, null, [], 'NE_Starter'),
+  NW_Starter: new Tile('Starter', 'placeholder', 0, 0, null, [], 'NW_Starter'),
+  S_Starter: new Tile('Starter', 'placeholder', 0, 0, null, [], 'S_Starter'),
+  N_Starter: new Tile('Starter', 'placeholder', 0, 0, null, [], 'N_Starter'),
+  E_Starter: new Tile('Starter', 'placeholder', 0, 0, null, [], 'E_Starter'),
+  W_Starter: new Tile('Starter', 'placeholder', 0, 0, null, [], 'W_Starter'),
+  Starter: new Tile('Starter', 'placeholder', 0, 0, null, [], 'Starter'),
   
   suburb: new Tile('Suburb', 'residential', 3, 0, null, [new Effect(0,0,[],0,2)]),
   community_park: new Tile('Community Park', 'government', 4, 0, null, [
@@ -376,6 +394,7 @@ var tileSets = {
 };
 
 var ctx = null;
+var grid = null;
 
 function randomize_tiles() {
   [1,2,3,4,5,6,7].map(function(id) {
@@ -445,6 +464,38 @@ Suburbia.nextTile = function () {
   }
 }
 
+function resizeCanvas() {
+  var map = $('#map');
+  var width = $(window).width() - ($('#tile_supply').width() + $('#player_info').width()) * 1.1;
+  var height = $(window).height() - ($('#header').height() + $('#game_log').height()) * 1.1;
+  map.width(width);
+  map[0].width = width;
+  map.height(height);
+  map[0].height = height;
+  grid = new HT.Grid(width, height);
+  grid.draw(ctx);
+}
+
+function handleMouseMove(e) {
+  var canvasOffset = $("#map").offset();
+  mouseX = parseInt(e.clientX - canvasOffset.left);
+  mouseY = parseInt(e.clientY - canvasOffset.top);
+  var matching = grid.GetHexAt({X: mouseX, Y: mouseY});
+  var lastHex = grid.Hexes.filter(function(h){return h.selected;});
+  lastHex = lastHex.length > 0 ? lastHex[0] : null;
+  if (matching) {
+    if (lastHex && matching.Id != lastHex.Id) {
+      lastHex.selected = false;
+	  lastHex.draw(ctx);
+      matching.selected = true;
+      matching.draw(ctx);
+	} else if (!lastHex) {
+	  matching.selected = true;
+      matching.draw(ctx);
+	}
+  }
+}
+
 $().ready(function(){
   Suburbia.fillStacks();
   $('#real_estate li').on('click', function() {
@@ -452,5 +503,10 @@ $().ready(function(){
     console.log(Suburbia.real_estate.splice(id,1));
     Suburbia.updateRealEstate();
   });
+  HT.Hexagon.setRegularSize(40);
   ctx = $('#map')[0].getContext('2d');
+  resizeCanvas();
+  $(window).resize(resizeCanvas);
+  $('#map').mousemove(function(e){handleMouseMove(e);});
+  Suburbia.startingBoard().forEach(function(t){console.log(t.x + ', ' + t.y); t.content.draw('board', t);});
 });
