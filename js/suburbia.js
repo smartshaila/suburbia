@@ -26,7 +26,7 @@ Suburbia.startingBoard = function() {
   tiles.push({x:2,  y:-2, content:tokens.Starter});
   tiles.push({x:3,  y:-3, content:tokens.SW_Starter});
   tiles.push({x:3,  y:-2, content:tokens.W_Starter});
-  tiles.push({x:0,  y:0,  content:tokens.suburb});
+  tiles.push({x:0,  y:0,  content:tokens.suburbs});
   tiles.push({x:0,  y:1,  content:tokens.community_park});
   tiles.push({x:0,  y:2,  content:tokens.heavy_factory});
   return tiles;
@@ -56,8 +56,8 @@ Tile.prototype.draw = function (draw_type, location) {
 	$('#real_estate').append(container);
 	container.css('top', reTile.offset().top + (reTile.outerHeight() / 2) - (container.outerHeight() / 2));
   } else if (draw_type == "board") {
+	var hex = grid.GetHexByCoOrds(location.x + 5, location.y + 4);
     if (this.image.indexOf('.png') == -1) {
-	  var hex = grid.GetHexByCoOrds(location.x + 5, location.y + 4);
 	  hex.fillStyle = 'blue';
 	  switch(this.image) {
 	    case 'SE_Starter': hex.fillPath = [{x:'center', y:2}, {x:2, y:2}, {x:3, y:3}, {x:'center', y:3}]; break;
@@ -72,7 +72,8 @@ Tile.prototype.draw = function (draw_type, location) {
 	  }
 	  hex.draw(ctx);
 	} else {
-	  // Display image?
+	  hex.drawImage = this.image;
+	  hex.draw(ctx);
 	}
   }
 }
@@ -102,10 +103,6 @@ function Effect (timing, category, matching, range, amount) {
   this.range = range;
   
   this.amount = amount;
-}
-
-function drawBaseGrid() {
-    
 }
 
 var tokens = {
@@ -520,5 +517,5 @@ $().ready(function(){
   resizeCanvas();
   $(window).resize(resizeCanvas);
   $('#map').mousemove(function(e){handleMouseMove(e);});
-  Suburbia.startingBoard().forEach(function(t){console.log(t.x + ', ' + t.y); t.content.draw('board', t);});
+  Suburbia.startingBoard().forEach(function(t){t.content.draw('board', t);});
 });

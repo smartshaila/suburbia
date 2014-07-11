@@ -82,7 +82,6 @@ HT.Hexagon.prototype.getFillPoints = function() {
 	} else {
 		return this.fillPath.map(function(p) {
 			var result = {x: null, y: null};
-			console.log('X: ' + p.x + ', Y: ' + p.y);
 			result.x = p.x == 'center' ? self.MidPoint.X : self.Points[p.x].X;
 			result.y = p.y == 'center' ? self.MidPoint.Y : self.Points[p.y].Y;
 			return result;
@@ -109,8 +108,14 @@ HT.Hexagon.prototype.draw = function(ctx) {
 	ctx.clip();
 	ctx.clearRect(this.TopLeftPoint.X, this.TopLeftPoint.Y, HT.Hexagon.Static.WIDTH, HT.Hexagon.Static.HEIGHT);
 	ctx.stroke();
-	
-	if (this.fillPath) {
+	if (this.drawImage) {
+	  var image = new Image();
+	  var self = this;
+	  image.onload = function() {
+	    ctx.drawImage(image, self.x, self.y, (self.BottomRightPoint.X - self.TopLeftPoint.X), (self.BottomRightPoint.Y - self.TopLeftPoint.Y));
+	  };
+	  image.src = this.drawImage;
+	} else if (this.fillPath) {
 		ctx.fillStyle = this.fillStyle;
 		ctx.beginPath();
 		var fillPoints = this.getFillPoints();

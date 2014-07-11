@@ -62,7 +62,6 @@ HT.Grid = function(/*double*/ width, /*double*/ height) {
 	{
 		var hexagonsByXOrY = HexagonsByXOrYCoOrd[coOrd1];
 		var coOrd2 = Math.floor((Object.keys(HexagonsByXOrYCoOrd).length - coOrd1) / 2);
-		console.log('co1: ' + coOrd1 + ', co2: ' + coOrd2);
 		for (var i in hexagonsByXOrY)
 		{
 			var h = hexagonsByXOrY[i];//Hexagon
