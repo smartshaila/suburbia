@@ -115,7 +115,7 @@ HT.Grid.prototype.GetHexDistance = function(/*Hexagon*/ h1, /*Hexagon*/ h2) {
 	//http://playtechs.blogspot.com/2007/04/hex-grids.html
 	var deltaX = h1.PathCoOrdX - h2.PathCoOrdX;
 	var deltaY = h1.PathCoOrdY - h2.PathCoOrdY;
-	return ((Math.abs(deltaX) + Math.abs(deltaY) + Math.abs(deltaX - deltaY)) / 2);
+	return ((Math.abs(deltaX) + Math.abs(deltaY) + Math.abs(deltaX + deltaY)) / 2);
 };
 
 /**
