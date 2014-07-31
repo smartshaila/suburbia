@@ -521,4 +521,5 @@ $().ready(function(){
   $(window).resize(Suburbia.hexGrid.resize);
   $(window).mousewheel(Suburbia.hexGrid.zoom);
   Suburbia.board.forEach(function(t){t.content.draw('board', t);});
+  Suburbia.hexGrid.reCenter();
 });

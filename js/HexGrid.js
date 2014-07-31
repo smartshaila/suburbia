@@ -60,6 +60,15 @@ HexGrid.prototype.zoom = function (e) {
   Suburbia.hexGrid.draw();
 }
 
+HexGrid.prototype.reCenter = function () {
+  var x = this.hexes.map(function(h){return h.pixelCenter.x});
+  var y = this.hexes.map(function(h){return h.pixelCenter.y});
+  var width = this.radius * 2 + (Math.max.apply(null, x) - Math.min.apply(null, x));
+  var height = this.radius * Math.SQRT3 + (Math.max.apply(null, y) - Math.min.apply(null, y));
+  this.stage.x((this.stage.width() / 2) + ((Math.min.apply(null, x) - this.radius) + (width / 2)));
+  this.stage.y((this.stage.height() / 2) - ((Math.min.apply(null, y) - this.radius * (Math.SQRT3 / 2)) + (height / 2)));
+}
+
 HexGrid.Hex = function (x, y, grid) {
   this.x = x;
   this.y = y;
@@ -92,6 +101,7 @@ HexGrid.Hex = function (x, y, grid) {
   this.group.on('mouseover', function () {
     self.drawShape.stroke('black');
 	self.drawShape.strokeWidth(4);
+	self.group.moveToTop();
 	if (self.customShape) {
 	  self.customShape.fill('red');
 	}
