@@ -157,14 +157,15 @@ HexGrid.Hex.prototype.setCustomShape = function (options) {
 }
 
 HexGrid.Hex.prototype.setImage = function(imagePath) {
+  var imageObj = new Image();
   var self = this;
-  this.imageObj = new Image();
-  this.imageObj.onload = function() {
-    self.drawShape.fillPatternImage(self.imageObj);
-    self.drawShape.fillPatternOffset(-self.imageObj.width/2, -self.imageObj.height/2);
+  imageObj.onload = function() {
+    self.drawShape.fillPatternImage(imageObj);
+	self.drawShape.fillPatternOffset({x: -imageObj.width / 2, y: -imageObj.height / 2});
+	self.drawShape.fillPatternRotation(-90);
+	self.drawShape.fillPatternScale({x: (self.parent.radius * 2) / imageObj.width, y: (Math.SQRT3 * self.parent.radius) / imageObj.height});
   }
-  this.imageObj.src = imagePath;
-  console.log(imagePath);
+  imageObj.src = imagePath;
 }
 
 HexGrid.Hex.prototype.neighborCoordinates = function () {
