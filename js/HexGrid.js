@@ -164,8 +164,13 @@ HexGrid.Hex.prototype.setImage = function(imagePath) {
 	self.drawShape.fillPatternOffset({x: -imageObj.width / 2, y: -imageObj.height / 2});
 	self.drawShape.fillPatternRotation(-90);
 	self.drawShape.fillPatternScale({x: (self.parent.radius * 2) / imageObj.width, y: (Math.SQRT3 * self.parent.radius) / imageObj.height});
+	self.drawLabel.visible(false);
+	Suburbia.hexGrid.draw();
   }
   imageObj.src = imagePath;
+  this.neighborCoordinates().forEach(function(location) {
+    Suburbia.hexGrid.getHex(location.x, location.y) || new HexGrid.Hex(location.x, location.y, Suburbia.hexGrid);
+  });
 }
 
 HexGrid.Hex.prototype.neighborCoordinates = function () {
