@@ -32,6 +32,25 @@ Suburbia.startingBoard = function() {
   return tiles;
 }
 
+Suburbia.openCoordinates = function() {
+  return _.uniq(
+    $.map(Suburbia.board.filter(
+      function(b) {return b.content.type != 'placeholder'}),
+	  function(t) {return getNeighboringCoordinates(t.x, t.y)})
+    .filter(function(t) {return !_.any(
+	  Suburbia.board.map(function(b){return {x: b.x, y: b.y}}), 
+	  function(b) {return t.x == b.x && t.y == b.y})
+    }),
+  false,
+  function(item) {return JSON.stringify(item)});
+}
+
+function getNeighboringCoordinates(x, y) {
+  return [{x: x-1, y: y}, {x: x, y: y-1}, {x: x+1, y: y-1}, {x: x-1, y: y+1}, {x: x, y: y+1}, {x: x+1, y: y}];
+}
+
+
+
 function Tile (name, type, cost, level, icon, effect, image) {
   this.name = name;
   this.type = type;
@@ -56,25 +75,25 @@ Tile.prototype.draw = function (draw_type, location) {
 	$('#real_estate').append(container);
 	container.css('top', reTile.offset().top + (reTile.outerHeight() / 2) - (container.outerHeight() / 2));
   } else if (draw_type == "board") {
-	var hex = grid.GetHexByCoOrds(location.x + 5, location.y + 4);
+	var hex = Suburbia.hexGrid.getHex(location.x, location.y) || new HexGrid.Hex(location.x, location.y, Suburbia.hexGrid);
     if (this.image.indexOf('.png') == -1) {
-	  hex.fillStyle = 'blue';
+	  var fillPath = [];
 	  switch(this.image) {
-	    case 'SE_Starter': hex.fillPath = [{x:'center', y:2}, {x:2, y:2}, {x:3, y:3}, {x:'center', y:3}]; break;
-		case 'SW_Starter': hex.fillPath = [{x:5, y:5}, {x:'center', y:5}, {x:'center', y:4}, {x:4, y:4}]; break;
-		case 'NE_Starter': hex.fillPath = [{x:'center', y:2}, {x:2, y:2}, {x:1, y:1}, {x:'center', y:1}]; break;
-		case 'NW_Starter': hex.fillPath = [{x:5, y:5}, {x:'center', y:5}, {x:'center', y:0}, {x:0, y:0}]; break;
-		case 'S_Starter': hex.fillPath = [{x:5, y:5}, {x:2, y:2}, {x:3, y:3}, {x:4, y:4}]; break;
-		case 'N_Starter': hex.fillPath = [{x:5, y:5}, {x:2, y:2}, {x:1, y:1}, {x:0, y:0}]; break;
-		case 'W_Starter': hex.fillPath = [{x:'center', y:0}, {x:'center', y:4}, {x:4, y:4}, {x:5, y:5}, {x:0, y:0}]; break;
-		case 'E_Starter': hex.fillPath = [{x:'center', y:0}, {x:'center', y:3}, {x:3, y:3}, {x:2, y:2}, {x:1, y:1}]; break;
-		case 'Starter': hex.fillPath = [{x:0, y:0}, {x:1, y:1}, {x:2, y:2}, {x:3, y:3}, {x:4, y:4}, {x:5, y:5}]; break;
+	    case 'SE_Starter': fillPath = [{x:'center', y:2}, {x:2, y:2}, {x:3, y:3}, {x:'center', y:3}]; break;
+		case 'SW_Starter': fillPath = [{x:5, y:5}, {x:'center', y:5}, {x:'center', y:4}, {x:4, y:4}]; break;
+		case 'NE_Starter': fillPath = [{x:'center', y:2}, {x:2, y:2}, {x:1, y:1}, {x:'center', y:1}]; break;
+		case 'NW_Starter': fillPath = [{x:5, y:5}, {x:'center', y:5}, {x:'center', y:0}, {x:0, y:0}]; break;
+		case 'S_Starter': fillPath = [{x:5, y:5}, {x:2, y:2}, {x:3, y:3}, {x:4, y:4}]; break;
+		case 'N_Starter': fillPath = [{x:5, y:5}, {x:2, y:2}, {x:1, y:1}, {x:0, y:0}]; break;
+		case 'W_Starter': fillPath = [{x:'center', y:0}, {x:'center', y:4}, {x:4, y:4}, {x:5, y:5}, {x:0, y:0}]; break;
+		case 'E_Starter': fillPath = [{x:'center', y:0}, {x:'center', y:3}, {x:3, y:3}, {x:2, y:2}, {x:1, y:1}]; break;
+		case 'Starter': fillPath = [{x:0, y:0}, {x:1, y:1}, {x:2, y:2}, {x:3, y:3}, {x:4, y:4}, {x:5, y:5}]; break;
 	  }
-	  hex.draw(ctx);
+	  hex.setCustomShape({fill: 'blue', path: fillPath, relativePath: true});
 	} else {
-	  hex.drawImage = this.image;
-	  hex.draw(ctx);
+	  hex.setImage(this.image);
 	}
+	Suburbia.hexGrid.draw();
   }
 }
 
@@ -396,9 +415,6 @@ var tileSets = {
     ]
 };
 
-var ctx = null;
-var grid = null;
-
 function randomize_tiles() {
   [1,2,3,4,5,6,7].map(function(id) {
     divName = '#tile' + id;
@@ -467,40 +483,29 @@ Suburbia.nextTile = function () {
   }
 }
 
-function resizeCanvas() {
-  var map = $('#map');
-  var width = $(window).width() - ($('#tile_supply').width() + $('#player_info').width()) * 1.1;
-  var height = $(window).height() - ($('#header').height() + $('#game_log').height()) * 1.1;
-  map.width(width);
-  map[0].width = width;
-  map.height(height);
-  map[0].height = height;
-  grid = new HT.Grid(width, height);
-  grid.draw(ctx);
-}
-
-function handleMouseMove(e) {
-  var canvasOffset = $("#map").offset();
-  mouseX = parseInt(e.clientX - canvasOffset.left);
-  mouseY = parseInt(e.clientY - canvasOffset.top);
-  var matching = grid.GetHexAt({X: mouseX, Y: mouseY});
-  var lastHex = grid.Hexes.filter(function(h){return h.selected;});
-  lastHex = lastHex.length > 0 ? lastHex[0] : null;
-  if (matching) {
-    if (lastHex && matching.Id != lastHex.Id) {
-      lastHex.selected = false;
-	  lastHex.draw(ctx);
-      matching.selected = true;
-      matching.draw(ctx);
-	} else if (!lastHex) {
-	  matching.selected = true;
-      matching.draw(ctx);
-	}
-  }
+function boardBoundaries() {
+  return _.union(Suburbia.board, Suburbia.openCoordinates()).reduce(function(res, tile){
+    var tileX = (3/2) * tile.x;
+    var tileY = Math.sqrt(3) * (tile.y + tile.x / 2);
+    if (res.minX == null || res.minX > tileX) {
+      res.minX = tileX;
+    }
+    if (res.maxX == null || res.maxX < tileX) {
+      res.maxX = tileX;
+    }
+    if (res.minY == null || res.minY > tileY) {
+      res.minY = tileY;
+    }
+    if (res.maxY == null || res.maxY < tileY) {
+      res.maxY = tileY;
+    }
+    return res;
+  }, {});
 }
 
 $().ready(function(){
   Suburbia.fillStacks();
+  Suburbia.board = Suburbia.startingBoard();
   $('#real_estate li').on('click', function() {
     var id = Number(this.id.substr(4,1));
     console.log(Suburbia.real_estate.splice(id,1));
@@ -512,10 +517,8 @@ $().ready(function(){
   }, function() {
 	$('.tile_hover').remove();
   });
-  HT.Hexagon.setRegularSize(40);
-  ctx = $('#map')[0].getContext('2d');
-  resizeCanvas();
-  $(window).resize(resizeCanvas);
-  $('#map').mousemove(function(e){handleMouseMove(e);});
-  Suburbia.startingBoard().forEach(function(t){t.content.draw('board', t);});
+  Suburbia.hexGrid = new HexGrid('borough');
+  $(window).resize(Suburbia.hexGrid.resize);
+  $(window).mousewheel(Suburbia.hexGrid.zoom);
+  Suburbia.board.forEach(function(t){t.content.draw('board', t);});
 });
