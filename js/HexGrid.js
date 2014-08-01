@@ -44,11 +44,11 @@ HexGrid.prototype.draw = function () {
 }
 
 HexGrid.prototype.resize = function () {
-  var width = $(window).width() - ($('#tile_supply').outerWidth() + $('#player_info').outerWidth()) - 2;
-  var height = $(window).height() - ($('#header').outerHeight() + $('#game_log').outerHeight()) - 2;
+  var width = $(window).width() - ($('#tile_supply').outerWidth() + $('#player_info').outerWidth()) - 4;
+  var height = $(window).height() - ($('#header').outerHeight() + $('#game_log').outerHeight()) - 4;
   Suburbia.hexGrid.stage.size({width: width, height: height});
   // var bounds = boardBoundaries();
-  Suburbia.hexGrid.draw();
+  Suburbia.hexGrid.reCenter();
 }
 
 HexGrid.prototype.zoom = function (e) {
@@ -65,8 +65,11 @@ HexGrid.prototype.reCenter = function () {
   var y = this.hexes.map(function(h){return h.pixelCenter.y});
   var width = this.radius * 2 + (Math.max.apply(null, x) - Math.min.apply(null, x));
   var height = this.radius * Math.SQRT3 + (Math.max.apply(null, y) - Math.min.apply(null, y));
-  this.stage.x((this.stage.width() / 2) + ((Math.min.apply(null, x) - this.radius) + (width / 2)));
-  this.stage.y((this.stage.height() / 2) - ((Math.min.apply(null, y) - this.radius * (Math.SQRT3 / 2)) + (height / 2)));
+  this.stage.x((this.stage.width() / 2) + (Math.min.apply(null, x) - this.radius + (width / 2)));
+  this.stage.y((this.stage.height() / 2) - (Math.min.apply(null, y) - this.radius * (Math.SQRT3 / 2) + (height / 2)));
+  var scaling = Math.min(this.stage.width() / width, this.stage.height() / height) * 0.9
+  this.layer.scale({x: scaling, y: scaling});
+  this.draw();
 }
 
 HexGrid.Hex = function (x, y, grid) {
@@ -104,6 +107,8 @@ HexGrid.Hex = function (x, y, grid) {
 	self.group.moveToTop();
 	if (self.customShape) {
 	  self.customShape.fill('red');
+	} else if (Suburbia.selectedId != null && !Suburbia.getTile(x, y)) {
+	  self.setImage(Suburbia.tokens[Suburbia.real_estate[Suburbia.selectedId]].imageObj, true);
 	}
 	self.parent.layer.draw();
   });
@@ -112,8 +117,19 @@ HexGrid.Hex = function (x, y, grid) {
 	self.drawShape.strokeWidth(2);
 	if (self.customShape) {
 	  self.customShape.fill('blue');
+	} else if (Suburbia.selectedId != null && !Suburbia.getTile(x, y)) {
+	  self.setImage();
 	}
 	self.parent.layer.draw();
+  });
+  this.group.on('click', function() {
+    if (Suburbia.selectedId != null && !Suburbia.getTile(x, y)) {
+	  var tile = Suburbia.real_estate.splice(Suburbia.selectedId, 1);
+	  Suburbia.board.push({x: self.x, y: self.y, content: Suburbia.tokens[tile]});
+	  Suburbia.updateRealEstate();
+	  Suburbia.updateHexGrid();
+	  Suburbia.selectedId = null;
+	}
   });
   this.parent.add(this);
 }
@@ -166,21 +182,32 @@ HexGrid.Hex.prototype.setCustomShape = function (options) {
   this.group.add(this.customShape);
 }
 
-HexGrid.Hex.prototype.setImage = function(imagePath) {
-  var imageObj = new Image();
-  var self = this;
-  imageObj.onload = function() {
-    self.drawShape.fillPatternImage(imageObj);
-	self.drawShape.fillPatternOffset({x: -imageObj.width / 2, y: -imageObj.height / 2});
-	self.drawShape.fillPatternRotation(-90);
-	self.drawShape.fillPatternScale({x: (self.parent.radius * 2) / imageObj.width, y: (Math.SQRT3 * self.parent.radius) / imageObj.height});
-	self.drawLabel.visible(false);
+HexGrid.Hex.prototype.setImage = function(imageObj, temporary) {
+  if (imageObj) {
+//    var imageObj = new Image();
+    var self = this;
+    imageObj.onload = function() {
+	  self.drawShape.fillEnabled(true);
+      self.drawShape.fillPatternImage(imageObj);
+	  self.drawShape.fillPatternOffset({x: -imageObj.width / 2, y: -imageObj.height / 2});
+      self.drawShape.fillPatternRotation(-90);
+	  self.drawShape.fillPatternScale({x: (self.parent.radius * 2) / imageObj.width, y: (Math.SQRT3 * self.parent.radius) / imageObj.height});
+      self.drawLabel.visible(false);
+      Suburbia.hexGrid.draw();
+    }
+	if (imageObj.complete) {
+	  imageObj.onload();
+	}
+	if (!temporary) {
+      this.neighborCoordinates().forEach(function(location) {
+        Suburbia.hexGrid.getHex(location.x, location.y) || new HexGrid.Hex(location.x, location.y, Suburbia.hexGrid);
+      });
+	}
+  } else {
+    this.drawShape.fillEnabled(false);
+	this.drawLabel.visible(true);
 	Suburbia.hexGrid.draw();
   }
-  imageObj.src = imagePath;
-  this.neighborCoordinates().forEach(function(location) {
-    Suburbia.hexGrid.getHex(location.x, location.y) || new HexGrid.Hex(location.x, location.y, Suburbia.hexGrid);
-  });
 }
 
 HexGrid.Hex.prototype.neighborCoordinates = function () {

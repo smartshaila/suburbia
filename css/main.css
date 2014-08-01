@@ -152,6 +152,11 @@ html, body {
   /*height:50%;*/
 }
 
+#real_estate ul li.selected {
+  background-color: #DDDDDD;
+  border: 1px solid #AAAAAA;
+}
+
 .inflation, .count {
   /*margin-top:3px;*/
   margin-left:5px;

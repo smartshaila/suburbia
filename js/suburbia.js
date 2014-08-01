@@ -15,20 +15,20 @@ Suburbia.startingBoard = function() {
   
   var tiles = [];
   
-  tiles.push({x:-3, y:0,  content:tokens.SE_Starter});
-  tiles.push({x:-3, y:1,  content:tokens.E_Starter});
-  tiles.push({x:-2, y:0,  content:tokens.Starter});
-  tiles.push({x:-1, y:-1, content:tokens.S_Starter});
-  tiles.push({x:-1, y:0,  content:tokens.Starter});
-  tiles.push({x:0,  y:-1, content:tokens.Starter});
-  tiles.push({x:1,  y:-2, content:tokens.S_Starter});
-  tiles.push({x:1,  y:-1, content:tokens.Starter});
-  tiles.push({x:2,  y:-2, content:tokens.Starter});
-  tiles.push({x:3,  y:-3, content:tokens.SW_Starter});
-  tiles.push({x:3,  y:-2, content:tokens.W_Starter});
-  tiles.push({x:0,  y:0,  content:tokens.suburbs});
-  tiles.push({x:0,  y:1,  content:tokens.community_park});
-  tiles.push({x:0,  y:2,  content:tokens.heavy_factory});
+  tiles.push({x:-3, y:0,  content:Suburbia.tokens.SE_Starter});
+  tiles.push({x:-3, y:1,  content:Suburbia.tokens.E_Starter});
+  tiles.push({x:-2, y:0,  content:Suburbia.tokens.Starter});
+  tiles.push({x:-1, y:-1, content:Suburbia.tokens.S_Starter});
+  tiles.push({x:-1, y:0,  content:Suburbia.tokens.Starter});
+  tiles.push({x:0,  y:-1, content:Suburbia.tokens.Starter});
+  tiles.push({x:1,  y:-2, content:Suburbia.tokens.S_Starter});
+  tiles.push({x:1,  y:-1, content:Suburbia.tokens.Starter});
+  tiles.push({x:2,  y:-2, content:Suburbia.tokens.Starter});
+  tiles.push({x:3,  y:-3, content:Suburbia.tokens.SW_Starter});
+  tiles.push({x:3,  y:-2, content:Suburbia.tokens.W_Starter});
+  tiles.push({x:0,  y:0,  content:Suburbia.tokens.suburbs});
+  tiles.push({x:0,  y:1,  content:Suburbia.tokens.community_park});
+  tiles.push({x:0,  y:2,  content:Suburbia.tokens.heavy_factory});
   return tiles;
 }
 
@@ -43,6 +43,15 @@ Suburbia.openCoordinates = function() {
     }),
   false,
   function(item) {return JSON.stringify(item)});
+}
+
+Suburbia.getTile = function (x, y) {
+  var results = Suburbia.board.filter(function(t) {return t.x == x && t.y == y});
+  if (results.length) {
+    return results[0];
+  } else {
+    return null;
+  }
 }
 
 function getNeighboringCoordinates(x, y) {
@@ -89,9 +98,11 @@ Tile.prototype.draw = function (draw_type, location) {
 		case 'E_Starter': fillPath = [{x:'center', y:0}, {x:'center', y:3}, {x:3, y:3}, {x:2, y:2}, {x:1, y:1}]; break;
 		case 'Starter': fillPath = [{x:0, y:0}, {x:1, y:1}, {x:2, y:2}, {x:3, y:3}, {x:4, y:4}, {x:5, y:5}]; break;
 	  }
-	  hex.setCustomShape({fill: 'blue', path: fillPath, relativePath: true});
-	} else {
-	  hex.setImage(this.image);
+	  if (fillPath.length > 0) {
+	    hex.setCustomShape({fill: 'blue', path: fillPath, relativePath: true});
+	  }
+	} else if (this.imageObj) {
+	  hex.setImage(this.imageObj);
 	}
 	Suburbia.hexGrid.draw();
   }
@@ -124,7 +135,7 @@ function Effect (timing, category, matching, range, amount) {
   this.amount = amount;
 }
 
-var tokens = {
+Suburbia.tokens = {
   SE_Starter: new Tile('Starter', 'placeholder', 0, 0, null, [], 'SE_Starter'),
   SW_Starter: new Tile('Starter', 'placeholder', 0, 0, null, [], 'SW_Starter'),
   NE_Starter: new Tile('Starter', 'placeholder', 0, 0, null, [], 'NE_Starter'),
@@ -361,7 +372,16 @@ var tokens = {
   ])
 };
 
-Object.keys(tokens).forEach(function(t){tokens[t].image = t.indexOf("Starter") > -1 ? t : 'images/' + t + '.png'});
+Object.keys(Suburbia.tokens).forEach(function (t) {
+  if (t.indexOf("Starter") > -1) {
+    Suburbia.tokens[t].image = t;
+  } else {
+    var img = new Image();
+	img.src = 'images/' + t + '.png';
+    Suburbia.tokens[t].image = img.src;
+	Suburbia.tokens[t].imageObj = img;
+  }
+});
 
 var tileSets = {
     base: [
@@ -420,7 +440,7 @@ function randomize_tiles() {
     divName = '#tile' + id;
     tile = {};
     do {
-      tile = tokens[Object.keys(tokens)[Math.floor(Math.random() * (Object.keys(tokens).length))]];
+      tile = Suburbia.tokens[Object.keys(Suburbia.tokens)[Math.floor(Math.random() * (Object.keys(Suburbia.tokens).length))]];
     } while (typeof(tile.type) ==  'undefined' || tile.type == 'placeholder')
     $(divName).removeClass();
     $(divName).addClass(tile.type).addClass(tile.icon);
@@ -432,7 +452,7 @@ function randomize_tiles() {
 
 function selectTiles(tile_set, counts) {
     choices = [1,2,3].map(function(level) {return $.map(tile_set.filter(function(t){
-        return tokens[t[0]].level == level;
+        return Suburbia.tokens[t[0]].level == level;
     }).map(function(t) {
         return Array.apply(null, new Array(t[1])).map(String.prototype.valueOf, t[0]);
     }), function(i){return i;})});
@@ -464,11 +484,16 @@ Suburbia.updateRealEstate = function () {
     Suburbia.real_estate.push(Suburbia.nextTile());
   }
   Suburbia.real_estate.forEach(function (tile, i) {
-    tokens[tile].draw('real_estate', i);
+    Suburbia.tokens[tile].draw('real_estate', i);
   });
   Object.keys(Suburbia.stacks).forEach(function(stack){
     $('#' + stack + '_supply').text(Suburbia.stacks[stack].length);
   });
+}
+
+Suburbia.updateHexGrid = function () {
+  Suburbia.board.forEach(function(t){t.content.draw('board', t);});
+  Suburbia.hexGrid.reCenter();
 }
 
 Suburbia.nextTile = function () {
@@ -507,19 +532,23 @@ $().ready(function(){
   Suburbia.fillStacks();
   Suburbia.board = Suburbia.startingBoard();
   $('#real_estate li').on('click', function() {
-    var id = Number(this.id.substr(4,1));
-    console.log(Suburbia.real_estate.splice(id,1));
-    Suburbia.updateRealEstate();
+    if (Suburbia.selectedId != null) {
+	  $('#tile' + Suburbia.selectedId).removeClass('selected');
+	}
+    Suburbia.selectedId = Number(this.id.substr(4,1));
+	$(this).addClass('selected');
+    //console.log(Suburbia.real_estate.splice(id,1));
+    //Suburbia.updateRealEstate();
   });
   $('#real_estate li').hover(function() {
     var id = Number(this.id.substr(4,1));
-	tokens[Suburbia.real_estate[id]].draw('tooltip', id);
+	Suburbia.tokens[Suburbia.real_estate[id]].draw('tooltip', id);
   }, function() {
 	$('.tile_hover').remove();
   });
   Suburbia.hexGrid = new HexGrid('borough');
+  Suburbia.hexGrid.resize();
   $(window).resize(Suburbia.hexGrid.resize);
   $(window).mousewheel(Suburbia.hexGrid.zoom);
-  Suburbia.board.forEach(function(t){t.content.draw('board', t);});
-  Suburbia.hexGrid.reCenter();
+  Suburbia.updateHexGrid();
 });
