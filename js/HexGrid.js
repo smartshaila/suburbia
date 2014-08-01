@@ -105,6 +105,10 @@ HexGrid.Hex = function (x, y, grid) {
     self.drawShape.stroke('black');
 	self.drawShape.strokeWidth(4);
 	self.group.moveToTop();
+	if (self.drawImage) {
+	  self.drawImage.stroke('black');
+	  self.drawImage.strokeWidth(4);
+	}
 	if (self.customShape) {
 	  self.customShape.fill('red');
 	} else if (Suburbia.selectedId != null && !Suburbia.getTile(x, y)) {
@@ -115,6 +119,10 @@ HexGrid.Hex = function (x, y, grid) {
   this.group.on('mouseout', function () {
     self.drawShape.stroke('gray');
 	self.drawShape.strokeWidth(2);
+	if (self.drawImage) {
+	  self.drawImage.stroke('gray');
+	  self.drawImage.strokeWidth(2);
+	}
 	if (self.customShape) {
 	  self.customShape.fill('blue');
 	} else if (Suburbia.selectedId != null && !Suburbia.getTile(x, y)) {
@@ -184,15 +192,19 @@ HexGrid.Hex.prototype.setCustomShape = function (options) {
 
 HexGrid.Hex.prototype.setImage = function(imageObj, temporary) {
   if (imageObj) {
-//    var imageObj = new Image();
     var self = this;
+	if (self.drawImage == null) {
+	  self.drawImage = self.drawShape.clone();
+	  self.group.add(self.drawImage);
+	}
+	self.drawShape.visible(false);
+	self.drawLabel.visible(false);
+	self.drawImage.visible(true);
     imageObj.onload = function() {
-	  self.drawShape.fillEnabled(true);
-      self.drawShape.fillPatternImage(imageObj);
-	  self.drawShape.fillPatternOffset({x: -imageObj.width / 2, y: -imageObj.height / 2});
-      self.drawShape.fillPatternRotation(-90);
-	  self.drawShape.fillPatternScale({x: (self.parent.radius * 2) / imageObj.width, y: (Math.SQRT3 * self.parent.radius) / imageObj.height});
-      self.drawLabel.visible(false);
+      self.drawImage.fillPatternImage(imageObj);
+	  self.drawImage.fillPatternOffset({x: -imageObj.width / 2, y: -imageObj.height / 2});
+      self.drawImage.fillPatternRotation(-90);
+	  self.drawImage.fillPatternScale({x: (self.parent.radius * 2) / imageObj.width, y: (Math.SQRT3 * self.parent.radius) / imageObj.height});
       Suburbia.hexGrid.draw();
     }
 	if (imageObj.complete) {
@@ -204,8 +216,9 @@ HexGrid.Hex.prototype.setImage = function(imageObj, temporary) {
       });
 	}
   } else {
-    this.drawShape.fillEnabled(false);
+    this.drawShape.visible(true);
 	this.drawLabel.visible(true);
+	this.drawImage.visible(false);
 	Suburbia.hexGrid.draw();
   }
 }
