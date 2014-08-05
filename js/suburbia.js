@@ -32,41 +32,96 @@ Suburbia.startingBoard = function() {
   return tiles;
 }
 
-Suburbia.openCoordinates = function() {
-  return _.uniq(
-    $.map(Suburbia.board.filter(
-      function(b) {return b.content.type != 'placeholder'}),
-	  function(t) {return getNeighboringCoordinates(t.x, t.y)})
-    .filter(function(t) {return !_.any(
-	  Suburbia.board.map(function(b){return {x: b.x, y: b.y}}), 
-	  function(b) {return t.x == b.x && t.y == b.y})
-    }),
-  false,
-  function(item) {return JSON.stringify(item)});
+Suburbia.startingPlayers = function () {
+  var players = [];
+  
+  players.push(new Player('player1', '#AABBCC'));
+  players.forEach(function(p) {
+    Suburbia.startingBoard().forEach(function(t) {
+	  var res = p.place(t);
+	});
+  });
+  return players;
 }
 
-Suburbia.getTile = function (x, y) {
-  var results = Suburbia.board.filter(function(t) {return t.x == x && t.y == y});
-  if (results.length) {
-    return results[0];
-  } else {
-    return null;
-  }
+Suburbia.player = function () {
+  return Suburbia.players[Suburbia.current_player];
 }
 
-function getNeighboringCoordinates(x, y) {
+function Player (id, color) {
+  this.id = id;
+  this.color = color;
+  this.income = 0;
+  this.reputation = 0;
+  this.money = 10;
+  this.population = 0;
+  this.board = new Board();
+  this.hexGrid = new HexGrid('borough');
+  this.updateStats();
+}
+
+Player.prototype.updateStats = function () {
+  $('.' + this.id + ' .player_population').text(this.population);
+  $('.' + this.id + ' .player_reputation').text(this.reputation);
+  $('.' + this.id + ' .player_money').text(this.money);
+  $('.' + this.id + ' .player_income').text(this.income);
+  $('.' + this.id + ' .player_icon').css('background-color', this.color);
+}
+
+Player.prototype.place = function (tile) {
+  var res = this.board.place(tile);
+  console.log(res);
+  var self = this;
+  Object.keys(res).forEach(function(k) {
+    self[k] += res[k];
+  });
+  this.updateStats();
+}
+
+function Board (player) {
+  this.placedTiles = [];
+}
+
+Board.prototype.place = function (tile) {
+  var placedTile = new PlacedTile(tile, this);
+  this.placedTiles.push(placedTile);
+  var results = _.flatten(_.union(placedTile.getEffects(0),
+    placedTile.getEffects(1), 
+    _.map(this.placedTiles, function(t) {return t.getEffects(1, placedTile);})
+  )).reduce(function(res, e) {
+    Object.keys(e).forEach(function(k) {
+	  res[k] = (res[k] == null) ? e[k] : res[k] + e[k];
+	});
+	return res;
+  }, {});
+  return results;
+}
+
+Board.prototype.getHex = function (x, y) {
+  var result = this.placedTiles.filter(function(t) {return t.x == x && t.y == y});
+  return result.length > 0 ? result[0] : null;
+}
+
+Board.prototype.neighborCoordinates = function (x, y) {
   return [{x: x-1, y: y}, {x: x, y: y-1}, {x: x+1, y: y-1}, {x: x-1, y: y+1}, {x: x, y: y+1}, {x: x+1, y: y}];
 }
 
+Board.prototype.neighbors = function (x, y) {
+  var self = this;
+  return _.compact(this.neighborCoordinates(x, y).map(function(c) {return self.getHex(c.x, c.y)}));
+}
 
+Board.prototype.draw = function () {
+  this.placedTiles.forEach(function(t){t.tile.draw('board', t);});
+}
 
-function Tile (name, type, cost, level, icon, effect, image) {
+function Tile (name, type, cost, level, icon, effects, image) {
   this.name = name;
   this.type = type;
   this.cost = cost;
   this.level = level;
   this.icon = icon;
-  this.effect = effect;
+  this.effects = effects;
   this.image = image;
 }
 
@@ -99,13 +154,44 @@ Tile.prototype.draw = function (draw_type, location) {
 		case 'Starter': fillPath = [{x:0, y:0}, {x:1, y:1}, {x:2, y:2}, {x:3, y:3}, {x:4, y:4}, {x:5, y:5}]; break;
 	  }
 	  if (fillPath.length > 0) {
-	    hex.setCustomShape({fill: 'blue', path: fillPath, relativePath: true});
+	    hex.setCustomShape({fill: Suburbia.player().color, path: fillPath, relativePath: true});
 	  }
 	} else if (this.imageObj) {
 	  hex.setImage(this.imageObj);
 	}
 	Suburbia.hexGrid.draw();
   }
+}
+
+Tile.prototype.matches = function (matching) {
+  var self = this;
+  return _.any(matching, function(m) {
+    var key = Object.keys(m)[0];
+    var val = m[key];
+    return self[key] == val;
+  });
+}
+
+function PlacedTile (properties, board) {
+  this.x = properties.x;
+  this.y = properties.y;
+  this.tile = properties.content;
+  this.board = board;
+}
+
+PlacedTile.prototype.getEffects = function (timing, newTile) {
+  var self = this;
+  var effects = this.tile.effects.filter(function(e) {return e.timing == timing});
+  var results = effects.map(function(e) {
+    var r = {};
+    if (e.range == 0) {
+	  r[e.category] = e.amount;
+	} else {
+	  r[e.category] = e.amount * e.findMatches(self.board, self.x, self.y, newTile);
+	}
+	return r;
+  });
+  return results;
 }
 
 function Effect (timing, category, matching, range, amount) {
@@ -117,7 +203,7 @@ function Effect (timing, category, matching, range, amount) {
   // 1: Money
   // 2: Reputation
   // 3: Income
-  this.category = category;
+  this.category = Effect.CATEGORIES[category];
   
   // Array of K/V pairs, such as [{type:'residential', type:'industrial'}] or [{icon:'airport'}]
   this.matching = matching;
@@ -133,6 +219,39 @@ function Effect (timing, category, matching, range, amount) {
   this.range = range;
   
   this.amount = amount;
+}
+
+Effect.CATEGORIES = ['population', 'money', 'reputation', 'income'];
+
+Effect.prototype.findMatches = function(board, x, y, placedTile) {
+  var count = 0;
+  var self = this;
+  if (placedTile) {
+    switch(this.range) {
+	  case 1: 
+	    count += board.neighborCoordinates(x, y).filter(function(c){return c.x == placedTile.x && c.y == placedTile.y && placedTile.tile.matches(self.matching)}).length;
+		break;
+	  case 2:
+	  case 4:
+	  case 5:
+	    count += ((placedTile.x != x || placedTile.y != y) && placedTile.tile.matches(self.matching)) ? 1 : 0;
+		break;
+	}
+  } else {
+    switch (this.range) {
+      //case 0: break;
+	  case 1:
+	    count += board.neighbors(x, y).filter(function(t) {return t.tile.matches(self.matching);}).length;
+		break;
+      case 2:
+      case 4:
+	    count += board.placedTiles.filter(function(t) {return t.tile.matches(self.matching);}).length;
+		break;
+      //case 3: break;
+	  //case 5: break;
+    }
+  }
+  return count;
 }
 
 Suburbia.tokens = {
@@ -364,7 +483,7 @@ Suburbia.tokens = {
   ]),
   resort: new Tile('Resort', 'commercial', 16, 3, null, [
     new Effect(0,3,[],0,1),
-    new Effect(1,0,[{type:'residential'}],4)
+    new Effect(1,0,[{type:'residential'}],4,1)
   ]),
   university: new Tile('University', 'government', 15, 3, null, [
     new Effect(0,3,[],0,2),
@@ -384,55 +503,55 @@ Object.keys(Suburbia.tokens).forEach(function (t) {
 });
 
 var tileSets = {
-    base: [
-        ['business_supply' , 2],
-        ['convenience_store' , 2],
-        ["fancy_restaurant" , 3],
-        ["farm" , 2], 
-        ["fast_food" , 2], 
-        ["freeway" , 2], 
-        ["landfill" , 2], 
-        ["hoa" , 2], 
-        ["mint" , 2], 
-        ["mobile_home" , 2], 
-        ["municipal_airport" , 2], 
-        ["office_building" , 3], 
-        ["parking_lot" , 2], 
-        ["slaughterhouse" , 2], 
-        ["waterfront" , 2], 
-        ["burg_alspach", 2],
-        ["domestic_airport" , 2], 
-        ["elementary_school", 3],
-        ["gas_station", 2],
-        ["hostel", 2],
-        ["housing_projects", 2],
-        ["movie_theater", 2],
-        ["casino", 2],
-        ["museum", 2],
-        ["bureaucracy", 2],
-        ["postal_service", 2],
-        ["power_station", 2],
-        ["retirement_village", 2],
-        ["skyscraper", 2], 
-        ["shipping_center", 2], 
-        ["stadium", 2], 
-        ["warehouse", 2],
-        ["apartments", 2],
-        ["bnb", 2], 
-        ["boutique", 2], 
-        ["chip_fab", 2], 
-        ["condo", 2], 
-        ["high_school", 3],
-        ["hotel", 2], 
-        ["int_airport", 2],
-        ["epa", 2], 
-        ["middle_school", 3],
-        ["car_dealer", 2],
-        ["pr_firm", 2], 
-        ["recycling_plant", 2],
-        ["resort", 2], 
-        ["university", 2]
-    ]
+  base: [
+    ['business_supply' , 2],
+    ['convenience_store' , 2],
+    ['fancy_restaurant' , 3],
+    ['farm' , 2], 
+    ['fast_food' , 2], 
+    ['freeway' , 2], 
+    ['landfill' , 2], 
+    ['hoa' , 2], 
+    ['mint' , 2], 
+    ['mobile_home' , 2], 
+    ['municipal_airport' , 2], 
+    ['office_building' , 3], 
+    ['parking_lot' , 2], 
+    ['slaughterhouse' , 2], 
+    ['waterfront' , 2], 
+    ['burg_alspach', 2],
+    ['domestic_airport' , 2], 
+    ['elementary_school', 3],
+    ['gas_station', 2],
+    ['hostel', 2],
+    ['housing_projects', 2],
+    ['movie_theater', 2],
+    ['casino', 2],
+    ['museum', 2],
+    ['bureaucracy', 2],
+    ['postal_service', 2],
+    ['power_station', 2],
+    ['retirement_village', 2],
+    ['skyscraper', 2], 
+    ['shipping_center', 2], 
+    ['stadium', 2], 
+    ['warehouse', 2],
+    ['apartments', 2],
+    ['bnb', 2], 
+    ['boutique', 2], 
+    ['chip_fab', 2], 
+    ['condo', 2], 
+    ['high_school', 3],
+    ['hotel', 2], 
+    ['int_airport', 2],
+    ['epa', 2], 
+    ['middle_school', 3],
+    ['car_dealer', 2],
+    ['pr_firm', 2], 
+    ['recycling_plant', 2],
+    ['resort', 2], 
+    ['university', 2]
+  ]
 };
 
 function randomize_tiles() {
@@ -451,18 +570,18 @@ function randomize_tiles() {
 }
 
 function selectTiles(tile_set, counts) {
-    choices = [1,2,3].map(function(level) {return $.map(tile_set.filter(function(t){
-        return Suburbia.tokens[t[0]].level == level;
-    }).map(function(t) {
-        return Array.apply(null, new Array(t[1])).map(String.prototype.valueOf, t[0]);
-    }), function(i){return i;})});
-    return choices.map(function(level_array, index) {
-        var chosen = [];
-        for (var i=0; i<counts[index]; i++) {
-            chosen.push(level_array.splice(Math.floor(Math.random() * level_array.length), 1)[0]);
-        }
-        return chosen;
-    });
+  choices = [1,2,3].map(function(level) {return $.map(tile_set.filter(function(t){
+    return Suburbia.tokens[t[0]].level == level;
+  }).map(function(t) {
+    return Array.apply(null, new Array(t[1])).map(String.prototype.valueOf, t[0]);
+  }), function(i){return i;})});
+  return choices.map(function(level_array, index) {
+    var chosen = [];
+    for (var i=0; i<counts[index]; i++) {
+      chosen.push(level_array.splice(Math.floor(Math.random() * level_array.length), 1)[0]);
+    }
+    return chosen;
+  });
 };
 
 Suburbia.fillStacks = function () {
@@ -492,7 +611,7 @@ Suburbia.updateRealEstate = function () {
 }
 
 Suburbia.updateHexGrid = function () {
-  Suburbia.board.forEach(function(t){t.content.draw('board', t);});
+  Suburbia.player().board.draw();
   Suburbia.hexGrid.reCenter();
 }
 
@@ -508,37 +627,16 @@ Suburbia.nextTile = function () {
   }
 }
 
-function boardBoundaries() {
-  return _.union(Suburbia.board, Suburbia.openCoordinates()).reduce(function(res, tile){
-    var tileX = (3/2) * tile.x;
-    var tileY = Math.sqrt(3) * (tile.y + tile.x / 2);
-    if (res.minX == null || res.minX > tileX) {
-      res.minX = tileX;
-    }
-    if (res.maxX == null || res.maxX < tileX) {
-      res.maxX = tileX;
-    }
-    if (res.minY == null || res.minY > tileY) {
-      res.minY = tileY;
-    }
-    if (res.maxY == null || res.maxY < tileY) {
-      res.maxY = tileY;
-    }
-    return res;
-  }, {});
-}
-
 $().ready(function(){
   Suburbia.fillStacks();
-  Suburbia.board = Suburbia.startingBoard();
+  Suburbia.players = Suburbia.startingPlayers();
+  Suburbia.current_player = 0;
   $('#real_estate li').on('click', function() {
     if (Suburbia.selectedId != null) {
 	  $('#tile' + Suburbia.selectedId).removeClass('selected');
 	}
     Suburbia.selectedId = Number(this.id.substr(4,1));
 	$(this).addClass('selected');
-    //console.log(Suburbia.real_estate.splice(id,1));
-    //Suburbia.updateRealEstate();
   });
   $('#real_estate li').hover(function() {
     var id = Number(this.id.substr(4,1));

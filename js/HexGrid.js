@@ -111,7 +111,7 @@ HexGrid.Hex = function (x, y, grid) {
 	}
 	if (self.customShape) {
 	  self.customShape.fill('red');
-	} else if (Suburbia.selectedId != null && !Suburbia.getTile(x, y)) {
+	} else if (Suburbia.selectedId != null && !Suburbia.player().board.getHex(x, y)) {
 	  self.setImage(Suburbia.tokens[Suburbia.real_estate[Suburbia.selectedId]].imageObj, true);
 	}
 	self.parent.layer.draw();
@@ -125,15 +125,16 @@ HexGrid.Hex = function (x, y, grid) {
 	}
 	if (self.customShape) {
 	  self.customShape.fill('blue');
-	} else if (Suburbia.selectedId != null && !Suburbia.getTile(x, y)) {
+	} else if (Suburbia.selectedId != null && !Suburbia.player().board.getHex(x, y)) {
 	  self.setImage();
 	}
 	self.parent.layer.draw();
   });
   this.group.on('click', function() {
-    if (Suburbia.selectedId != null && !Suburbia.getTile(x, y)) {
+    if (Suburbia.selectedId != null && !Suburbia.player().board.getHex(x, y)) {
 	  var tile = Suburbia.real_estate.splice(Suburbia.selectedId, 1);
-	  Suburbia.board.push({x: self.x, y: self.y, content: Suburbia.tokens[tile]});
+	  var tileInfo = {x: self.x, y: self.y, content: Suburbia.tokens[tile]};
+	  Suburbia.players[0].place(tileInfo);
 	  Suburbia.updateRealEstate();
 	  Suburbia.updateHexGrid();
 	  Suburbia.selectedId = null;
